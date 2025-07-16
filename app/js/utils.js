@@ -1,3 +1,4 @@
+import { api } from './api.js';
 // Utility functions for the application
 
 /**
@@ -67,5 +68,70 @@ export function getRelativeTime(date, time) {
         }
     } catch (error) {
         return '';
+    }
+}
+
+/**
+ * Toggle like for a post by a user. Calls callback after update.
+ * @param {string} postId
+ * @param {string} userEmail
+ * @param {function} callback
+ */
+export async function toggleLike(postId, userEmail, callback) {
+    const post = await api.get(`/posts/${postId}`);
+    if (!post.likes) post.likes = [];
+    const isLiked = post.likes.includes(userEmail);
+    if (isLiked) {
+        post.likes = post.likes.filter(email => email !== userEmail);
+    } else {
+        post.likes.push(userEmail);
+    }
+    await api.patch(`/posts/${postId}`, { likes: post.likes });
+    if (typeof callback === 'function') callback();
+}
+
+/**
+ * Toggle interested for a post by a user. Calls callback after update.
+ * @param {string} postId
+ * @param {string} userEmail
+ * @param {function} callback
+ */
+export async function toggleInterested(postId, userEmail, callback) {
+    const post = await api.get(`/posts/${postId}`);
+    if (!post.interested) post.interested = [];
+    if (isPostPast(post.date, post.time)) {
+        alert('Cannot change interest for past posts.');
+        return;
+    }
+    const isInterested = post.interested.includes(userEmail);
+    if (isInterested) {
+        post.interested = post.interested.filter(email => email !== userEmail);
+        await api.patch(`/posts/${postId}`, { interested: post.interested });
+        alert('You are no longer interested.');
+    } else {
+        post.interested.push(userEmail);
+        await api.patch(`/posts/${postId}`, { interested: post.interested });
+        alert('Registration successful!');
+    }
+    if (typeof callback === 'function') callback();
+}
+
+/**
+ * Render the interested button HTML for a post and user.
+ * @param {object} post
+ * @param {object} user
+ * @param {boolean} isPast
+ * @returns {string}
+ */
+export function renderActionButton(post, user, isPast) {
+    if (user.role !== 'user') return '';
+    if (isPast) {
+        return `<button class="btn-secondary" disabled>Post Finished</button>`;
+    }
+    const isInterested = Array.isArray(post.interested) && post.interested.includes(user.email);
+    if (isInterested) {
+        return `<button class="btn-danger interested-btn" data-id="${post.id}" data-interested="true">Not interested</button>`;
+    } else {
+        return `<button class="btn-primary interested-btn" data-id="${post.id}" data-interested="false">I'm interested!</button>`;
     }
 }

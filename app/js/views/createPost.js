@@ -53,10 +53,6 @@ export async function showCreatePost() {
                         ${users.map(u => `<option value="${u.name}">${u.name}</option>`).join('')}
                     </select>
                 </div>` : ''}
-                <div class="form-group">
-                    <label for="capacity">Capacity</label>
-                    <input type="number" id="capacity" placeholder="e.g., 25" required>
-                </div>
                 <div class="form-actions">
                     <button type="submit" class="btn-primary">Save post</button>
                     <button type="button" id="cancel-btn" class="btn-secondary">Cancel</button>
@@ -83,14 +79,13 @@ export async function showCreatePost() {
             date: e.target.date.value,
             time: e.target.time.value,
             user: user.role === 'admin' ? e.target.user.value : user.name,
-            capacity: parseInt(e.target.capacity.value, 10),
-            interested: []
+            likes: []
         };
         await api.post('/posts', data);
-        location.hash = '#/dashboard/posts';
+        location.hash = '#/dashboard/my-posts';
     };
 
     document.getElementById('cancel-btn').onclick = () => {
-        location.hash = '#/dashboard/posts';
+        location.hash = '#/dashboard/my-posts';
     };
 }

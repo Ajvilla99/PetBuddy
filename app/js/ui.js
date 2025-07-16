@@ -20,17 +20,13 @@ export const ui = {
         // Define navigation links based on user role
         let navLinks = `
             <a href="#/dashboard" class="nav-btn" data-link><i class="fa-solid fa-house"></i> Dashboard</a>
-            <a href="#/dashboard/posts" class="nav-btn" data-link><i class="fa-solid fa-book"></i> View posts</a>
-            <a href="#/dashboard/posts/create" class="nav-btn" data-link><i class="fa-solid fa-plus-circle"></i> Create post</a>
+            <a href="#/dashboard/interested-posts" class="nav-btn" data-link><i class="fa-solid fa-heart"></i> Interested Posts</a>
+            <a href="#/dashboard/my-posts" class="nav-btn" data-link><i class="fa-solid fa-user"></i> My Posts</a>
+            <a href="#/dashboard/my-posts/create-post" class="nav-btn" data-link><i class="fa-solid fa-plus-circle"></i> Create Post</a>
         `;
         if (user.role === 'admin') {
             navLinks += `
                 <a href="#/dashboard/users" class="nav-btn" data-link><i class="fa-solid fa-users-cog"></i> Manage Users</a>
-            `;
-        }
-        if (user.role === 'user') {
-            navLinks += `
-                <a href="#/dashboard/my-posts" class="nav-btn" data-link><i class="fa-solid fa-user"></i> My posts</a>
             `;
         }
 

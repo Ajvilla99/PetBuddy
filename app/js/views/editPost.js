@@ -58,10 +58,6 @@ export async function showEditPost(postId) {
                         ${users.map(i => `<option value="${i.name}" ${i.name === post.user ? 'selected' : ''}>${i.name}</option>`).join('')}
                     </select>
                 </div>` : ''}
-                <div class="form-group">
-                    <label for="capacity">Capacity</label>
-                    <input type="number" id="capacity" value="${post.capacity}" required>
-                </div>
                 <div class="form-actions">
                     <button type="submit" class="btn-primary">Save Changes</button>
                     <button type="button" id="cancel-btn" class="btn-secondary">Cancel</button>
@@ -88,14 +84,13 @@ export async function showEditPost(postId) {
             category: e.target.category.value,
             date: e.target.date.value,
             time: e.target.time.value,
-            user: user.role === 'admin' ? e.target.user.value : user.name,
-            capacity: parseInt(e.target.capacity.value, 10),
+            user: user.role === 'admin' ? e.target.user.value : user.name
         };
         await api.patch(`/posts/${postId}`, updated);
-        location.hash = '#/dashboard/posts';
+        location.hash = '#/dashboard/my-posts';
     };
 
     document.getElementById('cancel-btn').onclick = () => {
-        location.hash = '#/dashboard/posts';
+        location.hash = '#/dashboard/my-posts';
     };
 }

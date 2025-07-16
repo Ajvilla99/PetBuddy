@@ -242,3 +242,8 @@
 .post-item.past-post .post-date i {
     color: var(--text-muted);
 }
+
+.fa-heart:hover, .liked {
+    color: var(--danger-color);
+    font-size: 1.2rem;
+}

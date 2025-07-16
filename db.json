@@ -20,21 +20,59 @@
       "email": "carlos.andres@user.com",
       "password": "ac9c2c34c9f7ad52528c3422af40a66e2e24aaf2a727831255413c9470158984",
       "role": "user"
+    },
+    {
+      "id": "dcdf",
+      "name": "Antonio Santiago",
+      "email": "adsa@gmail.com",
+      "password": "a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3",
+      "role": "user"
+    },
+    {
+      "id": "1a74",
+      "name": "asdas",
+      "email": "sdas@mail.com",
+      "password": "a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3",
+      "role": "user"
     }
   ],
   "posts": [
     {
-      "title": "Post at the Park",
-      "description": "A fun day at the park with games and activities.",
-      "category": "Outdoor",
+      "id": "5bfc",
+      "title": "asda",
+      "description": "sadas",
+      "category": "adsas",
+      "date": "2025-07-25",
+      "time": "00:12",
       "user": "Juan Perez",
-      "capacity": 18,
-      "id": "1",
-      "date": "2025-07-20",
-      "time": "10:00",
+      "likes": [
+        "adsa@gmail.com"
+      ],
       "interested": [
-        "carlos.andres@user.com"
+        "adsa@gmail.com"
       ]
+    },
+    {
+      "id": "6a6b",
+      "title": "Hola",
+      "description": "hola",
+      "category": "hola",
+      "date": "2025-07-25",
+      "time": "17:42",
+      "user": "Antonio Santiago",
+      "likes": [
+        "adsa@gmail.com"
+      ]
+    },
+    {
+      "id": "0124",
+      "title": "21",
+      "description": "212",
+      "category": "121",
+      "date": "2025-07-24",
+      "time": "00:12",
+      "user": "Antonio Santiago",
+      "likes": []
     }
   ]
 }

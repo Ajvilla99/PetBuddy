@@ -1,26 +1,24 @@
 import { api } from '../api.js';
 import { auth } from '../auth.js';
 import { renderForbidden } from './forbidden.js';
-import { formatDateTime, isPostPast, getRelativeTime } from '../utils.js';
+import { formatDateTime, isPostPast, getRelativeTime, toggleLike} from '../utils.js';
 
 /**
- * Displays the user's interested posts.
- * Only accessible to users with the 'user' role.
- * If the user is not a user, it renders a forbidden view.
+ * Displays the posts created by the logged-in user.
+ * Only accessible to users with the 'user' or 'admin' role.
  */
 export async function showMyPosts() {
     const user = auth.getUser();
-    if (user.role !== 'user') {
+    if (user.role !== 'user' && user.role !== 'admin') {
         renderForbidden();
         return;
     }
-    
-    document.getElementById('view-title').textContent = 'My posts';
+    document.getElementById('view-title').textContent = 'My Posts';
     const contentEl = document.getElementById('app-content');
-    contentEl.innerHTML = `<div class="posts-list"></div>`; // Placeholder
+    contentEl.innerHTML = `<div class="posts-list"></div>`;
 
     let posts = await api.get('/posts');
-    posts = posts.filter(a => Array.isArray(a.interested) && a.interested.includes(user.email));
+    posts = posts.filter(post => post.user === user.name || post.user === user.email);
 
     const postsListEl = contentEl.querySelector('.posts-list');
     if (posts.length === 0) {
@@ -28,8 +26,8 @@ export async function showMyPosts() {
             <div class="no-posts">
                 <div>
                     <i class="fa-solid fa-book-open-reader no-posts-icon"></i>
-                    <h3>You're Not interested in Any posts</h3>
-                    <p>Visit the 'View posts' page to find something new to discover!</p>
+                    <h3>You haven't created any posts</h3>
+                    <p>Use 'Create Post' to add your first post!</p>
                 </div>
             </div>`;
         return;
@@ -37,12 +35,17 @@ export async function showMyPosts() {
 
     postsListEl.innerHTML = posts.map(post => {
         const isPast = isPostPast(post.date, post.time);
-        
+        const isLiked = post.likes && post.likes.includes(user.email);
         return `
         <div class="post-item ${isPast ? 'past-post' : ''}">
             <div class="post-header">
                 <span class="post-category">${post.category || 'General'}</span>
                 ${isPast ? '<span class="post-status past">Past Post</span>' : ''}
+                <div class="post-actions">
+                    <button class="edit-btn" title="Edit post" data-id="${post.id}"><i class="fa-solid fa-pencil"></i></button>
+                    <button class="delete-btn" title="Delete post" data-id="${post.id}"><i class="fa-solid fa-trash"></i></button>
+                    <button class="view-liked-btn" title="View likes" data-id="${post.id}"><i class="fa-solid fa-heart"></i></button>
+                </div>
             </div>
             <div class="post-content">
                 <h3 class="post-name">${post.title || 'No Title'}</h3>
@@ -55,8 +58,42 @@ export async function showMyPosts() {
                 </div>
                 <div class="post-meta">
                     <span title="user"><i class="fa-solid fa-chalkboard-user"></i> ${post.user || 'N/A'}</span>
+                    <span title="Likes"><i class="fa-solid fa-heart like-btn ${isLiked ? 'liked' : ''}" data-id="${post.id}"></i> ${post.likes ? post.likes.length : 0}</span>
                 </div>
             </div>
         </div>
     `}).join('');
+
+    postsListEl.querySelectorAll('.edit-btn').forEach(btn => {
+        btn.onclick = () => location.hash = `#/dashboard/my-posts/edit/${btn.dataset.id}`;
+    });
+    postsListEl.querySelectorAll('.delete-btn').forEach(btn => {
+        btn.onclick = async () => {
+            if (confirm('Are you sure you want to delete this post?')) {
+                await api.delete(`/posts/${btn.dataset.id}`);
+                showMyPosts(); // Reload list
+            }
+        };
+    });
+    postsListEl.querySelectorAll('.view-liked-btn').forEach(btn => {
+        btn.onclick = async () => {
+            const post = await api.get(`/posts/${btn.dataset.id}`);
+            const likedList = post.likes && post.likes.length > 0
+                ? post.likes.join('\n')
+                : 'There are no users who liked this post.';
+            alert(`Liked by:\n\n${likedList}`);
+        };
+    });
+
+    if (user.role === 'user') {
+        postsListEl.querySelectorAll('.like-btn').forEach((icon) => {
+            icon.onclick = () => {
+                toggleLike(icon.dataset.id, user.email, showMyPosts);
+            };
+        });
+    }
 }
+
+
+
+

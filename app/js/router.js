@@ -12,7 +12,6 @@ import { api } from './api.js'
 import { showLogin } from './views/login.js';
 import { showRegister } from './views/register.js';
 import { showDashboard } from './views/dashboard.js';
-import { showPosts } from './views/posts.js';
 import { showCreatePost } from './views/createPost.js';
 import { showEditPost } from './views/editPost.js';
 import { renderNotFound } from './views/notFound.js';
@@ -20,6 +19,7 @@ import { showManageUsers } from './views/manageUsers.js';
 import { showEditUser } from './views/editUser.js';
 import { showCreateUser } from './views/createUser.js';
 import { showMyPosts } from './views/myPosts.js';
+import { showInterestedPosts } from './views/interestedPosts.js';
 
 
 // Define your SPA routes here
@@ -27,9 +27,8 @@ const routes = {
     '#/login': showLogin,
     '#/register': showRegister,
     '#/dashboard': showDashboard,
-    '#/dashboard/posts': showPosts,
-    '#/dashboard/posts/create': showCreatePost,
-    '#/dashboard/posts/edit/': showEditPost, // Note: Prefix for dynamic route
+    '#/dashboard/interested-posts': showInterestedPosts,
+    '#/dashboard/my-posts/create-post': showCreatePost,
     '#/dashboard/users': showManageUsers,
     '#/dashboard/users/edit/': showEditUser,   // Note: Prefix for dynamic route
     '#/dashboard/users/create': showCreateUser,
@@ -90,7 +89,7 @@ export async function router() {
     let params = null;
 
     // Prioritize dynamic routes since they are more specific
-    if (path.startsWith('#/dashboard/posts/edit/')) {
+    if (path.startsWith('#/dashboard/my-posts/edit/')) {
         view = showEditPost;
         params = path.split('/').pop();
     } else if (path.startsWith('#/dashboard/users/edit/')) {

@@ -73,11 +73,9 @@ A modern, full-featured **Single-Page Application (SPA)** for managing posts in 
     -   **Users:** Admins can create, read, update, and delete users
     -   **Posts:** Admins and users can create, read, update, and delete posts
     -   **Post Registration:** Users can register/unregister for posts
--   ✅ **Post Registration System:**
-    -   Users can browse and register for available posts
-    -   Registration is limited by post capacity
-    -   Users can view a list of their own interested posts
-    -   Real-time capacity tracking and availability display
+-   ✅ **Post Likes:** Users can like/unlike posts
+    -   Users can view a list of their liked posts
+    -   Real-time like count display
 -   ✅ **Dynamic & Professional UI/UX:**
     -   A persistent, two-column layout (sidebar + main content) for authenticated users
     -   Clean, modern interface with Font Awesome icons
