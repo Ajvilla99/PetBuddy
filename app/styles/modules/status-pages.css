@@ -1,0 +1,45 @@
+/* --- Status Page Styles (Not Found, Forbidden) --- */
+.status-page-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    background-color: var(--background-primary);
+    border-radius: var(--radius-lg);
+}
+
+.status-content {
+    text-align: center;
+    max-width: 450px;
+}
+
+.status-icon {
+    font-size: 5rem;
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+    opacity: 0.8;
+}
+
+.status-content h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.status-content p {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    margin-bottom: 2rem;
+}
+
+.status-content .btn-primary {
+    padding: 12px 32px;
+    font-size: 1rem;
+}
+
+textarea {
+    max-width: 100%;
+}

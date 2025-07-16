@@ -1,0 +1,95 @@
+/* --- Main App Layout --- */
+.sidebar {
+    width: 280px;
+    background-color: var(--background-primary);
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    overflow-y: auto;
+    box-shadow: var(--shadow-md);
+    transition: width 0.3s ease;
+}
+
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+    padding: 16px;
+    background: var(--background-secondary);
+    border-radius: var(--radius-lg);
+}
+
+.profile-img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--background-primary);
+    box-shadow: var(--shadow-sm);
+}
+
+.user-info h3 {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 2px;
+}
+
+.user-info p {
+    font-size: 12px;
+    color: var(--text-secondary);
+    font-weight: 500;
+    text-transform: capitalize;
+}
+
+.sidebar-nav {
+    flex: 1;
+}
+
+.nav-item {
+    margin-bottom: 4px;
+}
+
+.nav-btn {
+    width: 100%;
+    background: none;
+    border: none;
+    text-align: left;
+    padding: 12px 16px;
+    font-size: 14px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    border-radius: var(--radius-md);
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.nav-btn:hover {
+    background-color: var(--background-tertiary);
+    color: var(--text-primary);
+    transform: translateX(4px);
+}
+
+#logout-btn:hover {
+    background-color: var(--danger-color);
+    color: white;
+}
+
+.nav-btn.active {
+    background-color: var(--primary-light);
+    color: var(--primary-color);
+    font-weight: 600;
+    box-shadow: inset 3px 0 0 0 var(--primary-color);
+}
+
+.sidebar-footer {
+    margin-top: auto;
+    padding-top: 20px;
+    border-top: 3px solid var(--border-color);
+}
