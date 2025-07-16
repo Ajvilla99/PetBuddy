@@ -1,6 +1,6 @@
 # Posts Management SPA
 
-A modern, full-featured **Single-Page Application (SPA)** for managing posts in an online platform. This project demonstrates advanced JavaScript concepts including a role-based authentication system, protected client-side routing, full CRUD operations, and a professional, responsive UI/UX. The system allows administrators to manage posts and users, organizers to create and manage posts, while users can browse, register for, and view their posts, all powered by a `json-server` mock backend.
+A modern, full-featured **Single-Page Application (SPA)** for managing posts in an online platform. This project demonstrates advanced JavaScript concepts including a role-based authentication system, protected client-side routing, full CRUD operations, and a professional, responsive UI/UX. The system allows administrators to manage posts and users, users to create and manage posts, while users can browse, register for, and view their posts, all powered by a `json-server` mock backend.
 
 ---
 
@@ -41,10 +41,10 @@ A modern, full-featured **Single-Page Application (SPA)** for managing posts in 
     -   **Password:** `admin123`
     -   **Role:** Admin (can manage users and posts)
 
--   **Organizer:**
-    -   **Email:** `juan.perez@organizer.com`
+-   **User:**
+    -   **Email:** `juan.perez@user.com`
     -   **Password:** `juan123`
-    -   **Role:** Organizer (can create and manage posts)
+    -   **Role:** User (can create and manage posts)
 
 -   **User:**
     -   **Email:** `ana.garcia@user.com`
@@ -59,7 +59,7 @@ A modern, full-featured **Single-Page Application (SPA)** for managing posts in 
 
 -   ✅ **Three-Tier Role-Based Authentication System:**
     -   **Admin:** Full system access - manage users and posts
-    -   **Organizer:** Can create, edit, and manage their own posts
+    -   **User:** Can create, edit, and manage their own posts
     -   **User:** Can browse posts, register for posts, and view their registrations
     -   Secure password handling using SHA-256 hashing
 -   ✅ **Persistent Sessions:**
@@ -71,7 +71,7 @@ A modern, full-featured **Single-Page Application (SPA)** for managing posts in 
     -   Dynamic route parameters for editing specific posts and users
 -   ✅ **Full CRUD Functionality:**
     -   **Users:** Admins can create, read, update, and delete users
-    -   **Posts:** Admins and organizers can create, read, update, and delete posts
+    -   **Posts:** Admins and users can create, read, update, and delete posts
     -   **Post Registration:** Users can register/unregister for posts
 -   ✅ **Post Registration System:**
     -   Users can browse and register for available posts

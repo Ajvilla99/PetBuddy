@@ -4,22 +4,22 @@ import { formatDateTime, isPostPast, getRelativeTime } from '../utils.js';
 
 /**
  * Displays the list of posts.
- * If the user is an organizer, it shows their posts.
+ * If the user is an user, it shows their posts.
  * If the user is a user, it shows available posts.
  * If the user is not authenticated, it shows a forbidden view.
- * The view includes options to register for posts, edit posts (if admin or organizer), and delete posts (if admin).
+ * The view includes options to register for posts, edit posts (if admin or user), and delete posts (if admin).
  * It also shows the number of available slots for each post.
  */
 export async function showPosts() {
     const user = auth.getUser();
-    document.getElementById('view-title').textContent = user.role === 'organizer' ? 'Your posts' : 'Available posts';
+    document.getElementById('view-title').textContent = user.role === 'user' ? 'Your posts' : 'Available posts';
     const contentEl = document.getElementById('app-content');
     contentEl.innerHTML = `<div class="posts-list"></div>`; // Placeholder
 
     let posts = await api.get('/posts');
 
-    if (user.role === 'organizer') {
-        posts = posts.filter(post => post.organizer === user.name || post.organizer === user.email);
+    if (user.role === 'user') {
+        posts = posts.filter(post => post.user === user.name || post.user === user.email);
     }
 
     const postsListEl = contentEl.querySelector('.posts-list');
@@ -59,11 +59,9 @@ export async function showPosts() {
                 <span class="post-category">${post.category || 'General'}</span>
                 ${isPast ? '<span class="post-status past">Past Post</span>' : ''}
                 <div class="post-actions">
-                    ${user.role === 'admin'|| user.role === 'organizer' ? `
-                        <button class="edit-btn" title="Edit post" data-id="${post.id}"><i class="fa-solid fa-pencil"></i></button>
-                        <button class="delete-btn" title="Delete post" data-id="${post.id}"><i class="fa-solid fa-trash"></i></button>
-                        <button class="view-interested-btn" title="View interested" data-id="${post.id}"><i class="fa-solid fa-users"></i></button>
-                    ` : ''}
+                    <button class="edit-btn" title="Edit post" data-id="${post.id}"><i class="fa-solid fa-pencil"></i></button>
+                    <button class="delete-btn" title="Delete post" data-id="${post.id}"><i class="fa-solid fa-trash"></i></button>
+                    <button class="view-interested-btn" title="View interested" data-id="${post.id}"><i class="fa-solid fa-users"></i></button>
                 </div>
             </div>
             <div class="post-content">
@@ -76,7 +74,7 @@ export async function showPosts() {
                     <span class="post-relative-time">${getRelativeTime(post.date, post.time)}</span>
                 </div>
                 <div class="post-meta">
-                    <span title="organizer"><i class="fa-solid fa-chalkboard-user"></i> ${post.organizer || 'N/A'}</span>
+                    <span title="user"><i class="fa-solid fa-chalkboard-user"></i> ${post.user || 'N/A'}</span>
                     <span title="Available Slots"><i class="fa-solid fa-chair"></i> ${post.capacity || 0}</span>
                 </div>
             </div>
@@ -85,7 +83,7 @@ export async function showPosts() {
     `}).join('');
 
     // --- Add Post Listeners ---
-    if (user.role === 'admin' || user.role === 'organizer') {
+    if (user.role === 'admin' || user.role === 'user') {
         postsListEl.querySelectorAll('.edit-btn').forEach(btn => {
             btn.onclick = () => location.hash = `#/dashboard/posts/edit/${btn.dataset.id}`;
         });
@@ -99,7 +97,7 @@ export async function showPosts() {
         });
     }
 
-    if (user.role === 'admin' || user.role === 'organizer') {
+    if (user.role === 'admin' || user.role === 'user') {
         postsListEl.querySelectorAll('.view-interested-btn').forEach(btn => {
             btn.onclick = async () => {
                 const post = await api.get(`/posts/${btn.dataset.id}`);

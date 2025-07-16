@@ -4,12 +4,12 @@ import { renderForbidden } from './forbidden.js';
 
 /**
  * Displays the form to create a new post, fitting the new UI design.
- * Only accessible to users with the 'admin' or 'organizer' role.
+ * Only accessible to users with the 'admin' or 'user' role.
  * If the user is not authorized, it renders a forbidden view.
  */
 export async function showCreatePost() {
     const user = auth.getUser();
-    if (user.role !== 'admin' && user.role !== 'organizer') {
+    if (user.role !== 'admin' && user.role !== 'user') {
         renderForbidden();
         return;
     }
@@ -17,9 +17,9 @@ export async function showCreatePost() {
     document.getElementById('view-title').textContent = 'Create a New Post';
     const contentEl = document.getElementById('app-content');
 
-    const organizers = await api.get('/users?role=organizer');
-    if (!organizers || organizers.length === 0) {
-        alert('There are no organizers available. Please create an organizer first.');
+    const users = await api.get('/users?role=user');
+    if (!users || users.length === 0) {
+        alert('There are no users available. Please create an user first.');
         location.hash = '#/dashboard/users/create';
         return;
     }
@@ -48,9 +48,9 @@ export async function showCreatePost() {
                     <input type="time" id="time" required>
                 </div>
                 ${user.role === 'admin' ? `<div class="form-group">
-                    <label for="organizer">Organizer</label>
-                    <select id="organizer" required>
-                        ${organizers.map(i => `<option value="${i.name}">${i.name}</option>`).join('')}
+                    <label for="user">User</label>
+                    <select id="user" required>
+                        ${users.map(u => `<option value="${u.name}">${u.name}</option>`).join('')}
                     </select>
                 </div>` : ''}
                 <div class="form-group">
@@ -82,7 +82,7 @@ export async function showCreatePost() {
             category: e.target.category.value,
             date: e.target.date.value,
             time: e.target.time.value,
-            organizer: user.role === 'admin' ? e.target.organizer.value : user.name,
+            user: user.role === 'admin' ? e.target.user.value : user.name,
             capacity: parseInt(e.target.capacity.value, 10),
             interested: []
         };

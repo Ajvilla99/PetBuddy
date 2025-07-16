@@ -54,7 +54,7 @@ export async function showMyPosts() {
                     <span class="post-relative-time">${getRelativeTime(post.date, post.time)}</span>
                 </div>
                 <div class="post-meta">
-                    <span title="organizer"><i class="fa-solid fa-chalkboard-user"></i> ${post.organizer || 'N/A'}</span>
+                    <span title="user"><i class="fa-solid fa-chalkboard-user"></i> ${post.user || 'N/A'}</span>
                 </div>
             </div>
         </div>

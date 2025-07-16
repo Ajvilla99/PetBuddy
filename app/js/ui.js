@@ -21,12 +21,9 @@ export const ui = {
         let navLinks = `
             <a href="#/dashboard" class="nav-btn" data-link><i class="fa-solid fa-house"></i> Dashboard</a>
             <a href="#/dashboard/posts" class="nav-btn" data-link><i class="fa-solid fa-book"></i> View posts</a>
+            <a href="#/dashboard/posts/create" class="nav-btn" data-link><i class="fa-solid fa-plus-circle"></i> Create post</a>
         `;
-        if (user.role === 'admin' || user.role === 'organizer') {
-            navLinks += `
-                <a href="#/dashboard/posts/create" class="nav-btn" data-link><i class="fa-solid fa-plus-circle"></i> Create post</a>            `;
-        }
-                if (user.role === 'admin') {
+        if (user.role === 'admin') {
             navLinks += `
                 <a href="#/dashboard/users" class="nav-btn" data-link><i class="fa-solid fa-users-cog"></i> Manage Users</a>
             `;

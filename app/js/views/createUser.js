@@ -20,7 +20,7 @@ export async function showCreateUser() {
     const users = await api.get('/users');
     const roles = [...new Set(users.map(u => u.role))];
     if (!roles.includes('user')) roles.push('user');
-    if (!roles.includes('organizer')) roles.push('organizer');
+    if (!roles.includes('user')) roles.push('user');
 
 
     contentEl.innerHTML = `

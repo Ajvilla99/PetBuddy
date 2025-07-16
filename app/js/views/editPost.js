@@ -5,13 +5,13 @@ import { renderNotFound } from './notFound.js';
 
 /**
  * Displays the form to edit an existing post, fitting the new UI design.
- * Only accessible to users with the 'admin' or 'organizer' role.
+ * Only accessible to users with the 'admin' or 'user' role.
  * If the user is not authorized, it renders a forbidden view.
  * If the post does not exist, it renders a not found view.
  */
 export async function showEditPost(postId) {
     const user = auth.getUser();
-    if (user.role !== 'admin' && user.role !== 'organizer') {
+    if (user.role !== 'admin' && user.role !== 'user') {
         renderForbidden();
         return;
     }
@@ -19,9 +19,9 @@ export async function showEditPost(postId) {
     document.getElementById('view-title').textContent = 'Edit Post';
     const contentEl = document.getElementById('app-content');
     
-    const [post, organizers] = await Promise.all([
+    const [post, users] = await Promise.all([
         api.get(`/posts/${postId}`),
-        api.get('/users?role=organizer')
+        api.get('/users?role=user')
     ]);
 
     if (!post) {
@@ -53,9 +53,9 @@ export async function showEditPost(postId) {
                     <input type="time" id="time" value="${post.time || ''}" required>
                 </div>
                 ${user.role === 'admin' ? `<div class="form-group">
-                    <label for="organizer">Organizer</label>
-                    <select id="organizer" required>
-                        ${organizers.map(i => `<option value="${i.name}" ${i.name === post.organizer ? 'selected' : ''}>${i.name}</option>`).join('')}
+                    <label for="user">User</label>
+                    <select id="user" required>
+                        ${users.map(i => `<option value="${i.name}" ${i.name === post.user ? 'selected' : ''}>${i.name}</option>`).join('')}
                     </select>
                 </div>` : ''}
                 <div class="form-group">
@@ -88,7 +88,7 @@ export async function showEditPost(postId) {
             category: e.target.category.value,
             date: e.target.date.value,
             time: e.target.time.value,
-            organizer: user.role === 'admin' ? e.target.organizer.value : user.name,
+            user: user.role === 'admin' ? e.target.user.value : user.name,
             capacity: parseInt(e.target.capacity.value, 10),
         };
         await api.patch(`/posts/${postId}`, updated);

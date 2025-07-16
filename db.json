@@ -27,7 +27,7 @@
       "title": "Post at the Park",
       "description": "A fun day at the park with games and activities.",
       "category": "Outdoor",
-      "organizer": "Juan Perez",
+      "user": "Juan Perez",
       "capacity": 18,
       "id": "1",
       "date": "2025-07-20",
