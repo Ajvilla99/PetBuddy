@@ -1,0 +1,29 @@
+{
+  "name": "pet-buddy",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "vite",
+    "start:api": "json-server --watch db.json --port 3000",
+    "start": "concurrently \"npm run start:api\" \"npm run dev\"",
+    "start:dev": "concurrently --names \"API,DEV\" --prefix-colors \"blue,green\" \"npm run start:api\" \"npm run dev\""
+  },
+  "keywords": ["pet", "buddy", "json-server", "vite", "concurrently", "adoption"],
+  "authors": [
+    {
+      "name": "Antonio Carlos Santiago Rodríguez",
+      "email": "Santigor.acarlos@gmail.com"
+    }
+  ],
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "vite": "^7.0.4"
+  },
+  "dependencies": {
+    "json-server": "^1.0.0-beta.3",
+    "concurrently": "^9.2.0"
+  }
+}
