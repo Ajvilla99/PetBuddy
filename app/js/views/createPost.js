@@ -8,7 +8,7 @@ import { renderForbidden } from './forbidden.js';
  * If the user is not authorized, it renders a forbidden view.
  */
 export async function showCreatePost() {
-    const user = auth.getUser();
+    const user = await auth.getUser();
     if (user.role !== 'admin' && user.role !== 'user') {
         renderForbidden();
         return;
@@ -59,7 +59,7 @@ export async function showCreatePost() {
             description: e.target.description.value,
             category: e.target.category.value,
             imageUrl: e.target.imageUrl.value,
-            user: auth.getUser().name,
+            user: await auth.getUser().name,
             createdAt: new Date().toISOString(), // Timestamp automático
             likes: [],
             interested: []

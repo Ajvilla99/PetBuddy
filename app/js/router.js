@@ -28,7 +28,7 @@ const routes = {
     '#/register': showRegister,
     '#/dashboard': showDashboard,
     '#/dashboard/interested-posts': showInterestedPosts,
-    '#/dashboard/my-posts/create-post': showCreatePost,
+    '#/dashboard/create-post': showCreatePost,
     '#/dashboard/users': showManageUsers,
     '#/dashboard/users/edit/': showEditUser,   // Note: Prefix for dynamic route
     '#/dashboard/users/create': showCreateUser,
@@ -42,7 +42,7 @@ const routes = {
 export async function router() {
     const path = location.hash || '#/login';
     let isAuthenticated = auth.isAuthenticated();
-    let user = auth.getUser();
+    let user = await auth.getUser();
 
     // Verify if the user is authenticated and exists in the database
     if (isAuthenticated && user) {

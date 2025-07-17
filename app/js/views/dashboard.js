@@ -5,12 +5,11 @@ import { formatDateTime, getRelativeTime, toggleLike, renderActionButton, toggle
 
 
 export async function showDashboard() {
-    const user = auth.getUser();
+    const user = await auth.getUser();
     if (!user) return; 
 
     user.role === 'admin' ? document.getElementById('view-title').textContent = 'Dashboard' : ''
     const contentEl = document.getElementById('app-content');
-    contentEl.innerHTML = '';
 
 
     const allPosts = await api.get('/posts');
@@ -29,7 +28,6 @@ export async function showDashboard() {
             </div>`;
     } else {
         postsListHtml = filteredPosts.map(post => {
-    const isInterested = post.interested?.includes(user.email);
     const isLiked = post.likes?.includes(user.email);
     const actionButton = renderActionButton(post, user); 
 
@@ -46,7 +44,6 @@ export async function showDashboard() {
             <div class="user-post-title">
                 <div>
                     <strong>${post.user}</strong>
-                    <!-- EVIDENCIA: Se llama a la nueva función getRelativeTime -->
                     <small class="post-relative-time" title="${formatDateTime(post.createdAt)}"> · ${getRelativeTime(post.createdAt)}</small>
                 </div>
             </div>
@@ -91,7 +88,6 @@ export async function showDashboard() {
                 ${postsListHtml}
             </div>
         </div>
-        <aside class="aside-right">[CONTENIDO A PENSAR]</aside>
     `;
 
     if (user.role === 'user') {
@@ -109,7 +105,7 @@ export async function showDashboard() {
         createPostForm.onsubmit = (e) => {
             e.preventDefault();
             alert("Para crear un post completo con título, categoría y fecha, serás redirigido.");
-            location.hash = '#/dashboard/my-posts/create-post';
+            location.hash = '#/dashboard/create-post';
         };
     }
 }

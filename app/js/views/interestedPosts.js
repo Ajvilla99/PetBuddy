@@ -13,7 +13,7 @@ import {
  * Only accessible to users with the 'user' role.
  */
 export async function showInterestedPosts() {
-    const user = auth.getUser();
+    const user = await auth.getUser();
     user.role === 'admin' ? document.getElementById('view-title').textContent = 'Interested Posts' : '';
 
     const contentEl = document.getElementById('app-content');
@@ -42,49 +42,47 @@ export async function showInterestedPosts() {
 
     postsListEl.innerHTML = posts
         .map((post) => {
-            const isLiked = post.likes && post.likes.includes(user.email);
-            const actionButton = renderActionButton(post, user);
-            return `
-        <div class="post-item">
-            <div class="post-header">
-                <span class="post-category">${post.category || 'General'}</span>
-            </div>
-            <div class="post-content">
-                <h3 class="post-name">${post.title || 'No Title'}</h3>
-                <p class="post-description">${
-                    post.description || 'No description available.'
-                }</p>
-                <div class="post-datetime">
-                    <span class="post-date" title="Post Date and Time">
-                        <i class="fa-solid fa-calendar-days"></i> ${formatDateTime(
-                            post.date,
-                            post.time
-                        )}
-                    </span>
-                    <span class="post-relative-time">${getRelativeTime(
-                        post.date,
-                        post.time
-                    )}</span>
-                </div>
-                <div class="post-meta">
-                    <span title="user"><i class="fa-solid fa-chalkboard-user"></i> ${
-                        post.user || 'N/A'
-                    }</span>
-                    <span title="Likes"><i class="fa-solid fa-heart like-btn ${
-                        isLiked ? 'liked' : ''
-                    }" data-id="${post.id}"></i> ${
-                post.likes ? post.likes.length : 0
-            }</span>
-                </div>
-            </div>
-            ${
-                user.role === 'user'
-                    ? `<div class="post-footer">${actionButton}</div>`
-                    : ''
-            }
+    const isLiked = post.likes?.includes(user.email);
+    const actionButton = renderActionButton(post, user); 
+
+    const imageHtml = post.imageUrl
+        ? `<div class="user-post-images"><img src="${post.imageUrl}" alt="Imagen del post"></div>`
+        : '';
+
+    return `
+    <div class="user-post">
+        <div class="user-post-header">
+            <img src="https://i.pravatar.cc/150?u=${post.user}" alt="Avatar de ${post.user}">
         </div>
-    `;
-        })
+        <div class="user-post-content">
+            <div class="user-post-title">
+                <div>
+                    <strong>${post.user}</strong>
+                    <small class="post-relative-time" title="${formatDateTime(post.createdAt)}"> · ${getRelativeTime(post.createdAt)}</small>
+                </div>
+            </div>
+            
+            <h3>${post.title}</h3>
+            <p>${post.description}</p>
+            
+            ${imageHtml}
+            
+            <div class="user-post-actions">
+                <div class="post-meta">
+                    <span title="Likes" class="like-btn-container">
+                       <i class="fa-solid fa-heart like-btn ${isLiked ? 'liked' : ''}" data-id="${post.id}"></i> 
+                       ${post.likes?.length || 0}
+                    </span>
+                    <span title="Interesados">
+                       <i class="fa-solid fa-user-check"></i> 
+                       ${post.interested?.length || 0}
+                    </span>
+                </div>
+                ${user.role === 'user' ? `<div class="post-footer">${actionButton}</div>` : ''}
+            </div>
+        </div>
+    </div>`;
+})
         .join('');
 
     // Add event listeners for like and interested actions

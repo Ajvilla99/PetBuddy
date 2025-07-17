@@ -10,7 +10,7 @@ import { renderNotFound } from './notFound.js';
  * If the post does not exist, it renders a not found view.
  */
 export async function showEditPost(postId) {
-    const user = auth.getUser();
+    const user = await auth.getUser();
     if (user.role !== 'admin' && user.role !== 'user') {
         renderForbidden();
         return;

@@ -82,12 +82,12 @@ export async function toggleInterested(postId, userEmail, callback) {
     if (isInterested) {
         post.interested = post.interested.filter(email => email !== userEmail);
         await api.patch(`/posts/${postId}`, { interested: post.interested });
-        alert('You are no longer interested.');
-    } else {
+/*         alert('You are no longer interested.');
+ */    } else {
         post.interested.push(userEmail);
         await api.patch(`/posts/${postId}`, { interested: post.interested });
-        alert('Registration successful!');
-    }
+/*         alert('Registration successful!');
+ */    }
     if (typeof callback === 'function') callback();
 }
 

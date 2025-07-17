@@ -41,7 +41,6 @@
     font-size: 12px;
     color: var(--text-secondary);
     font-weight: 500;
-    text-transform: capitalize;
 }
 
 .sidebar-nav {
@@ -112,6 +111,7 @@
     border-left: 1px solid var(--border-color);
     border-right: 1px solid var(--border-color);
     min-width: 0; 
+    padding: 1rem;
 }
 
 .right-column {

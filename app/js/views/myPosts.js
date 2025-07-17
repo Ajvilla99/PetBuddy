@@ -1,14 +1,14 @@
 import { api } from '../api.js';
 import { auth } from '../auth.js';
 import { renderForbidden } from './forbidden.js';
-import { formatDateTime, getRelativeTime, toggleLike} from '../utils.js';
+import { formatDateTime, getRelativeTime, toggleLike, renderActionButton} from '../utils.js';
 
 /**
  * Displays the posts created by the logged-in user.
  * Only accessible to users with the 'user' or 'admin' role.
  */
 export async function showMyPosts() {
-    const user = auth.getUser();
+    const user = await auth.getUser();
     if (user.role !== 'user' && user.role !== 'admin') {
         renderForbidden();
         return;
@@ -35,33 +35,47 @@ export async function showMyPosts() {
     }
 
     postsListEl.innerHTML = posts.map(post => {
-        const isLiked = post.likes && post.likes.includes(user.email);
+        const isLiked = post.likes?.includes(user.email);
+        const actionButton = renderActionButton(post, user); 
+    
+        const imageHtml = post.imageUrl
+            ? `<div class="user-post-images"><img src="${post.imageUrl}" alt="Imagen del post"></div>`
+            : '';
+    
         return `
-        <div class="post-item">
-            <div class="post-header">
-                <span class="post-category">${post.category || 'General'}</span>
-                <div class="post-actions">
-                    <button class="edit-btn" title="Edit post" data-id="${post.id}"><i class="fa-solid fa-pencil"></i></button>
-                    <button class="delete-btn" title="Delete post" data-id="${post.id}"><i class="fa-solid fa-trash"></i></button>
-                    <button class="view-liked-btn" title="View likes" data-id="${post.id}"><i class="fa-solid fa-heart"></i></button>
-                </div>
+        <div class="user-post">
+            <div class="user-post-header">
+                <img src="https://i.pravatar.cc/150?u=${user.email}" alt="Avatar de ${post.user}">
             </div>
-            <div class="post-content">
-                <h3 class="post-name">${post.title || 'No Title'}</h3>
-                <p class="post-description">${post.description || 'No description available.'}</p>
-                <div class="post-datetime">
-                    <span class="post-date" title="Post Date and Time">
-                        <i class="fa-solid fa-calendar-days"></i> ${formatDateTime(post.date, post.time)}
-                    </span>
-                    <span class="post-relative-time">${getRelativeTime(post.date, post.time)}</span>
+            <div class="user-post-content">
+                <div class="user-post-title">
+                    <div>
+                        <strong>${post.user}</strong>
+                        <small class="post-relative-time" title="${formatDateTime(post.createdAt)}"> · ${getRelativeTime(post.createdAt)}</small>
+                    </div>
                 </div>
-                <div class="post-meta">
-                    <span title="user"><i class="fa-solid fa-chalkboard-user"></i> ${post.user || 'N/A'}</span>
-                    <span title="Likes"><i class="fa-solid fa-heart like-btn ${isLiked ? 'liked' : ''}" data-id="${post.id}"></i> ${post.likes ? post.likes.length : 0}</span>
+                
+                <h3>${post.title}</h3>
+                <p>${post.description}</p>
+                
+                ${imageHtml}
+                
+                <div class="user-post-actions">
+                    <div class="post-meta">
+                        <span title="Likes" class="like-btn-container">
+                           <i class="fa-solid fa-heart like-btn ${isLiked ? 'liked' : ''}" data-id="${post.id}"></i> 
+                           ${post.likes?.length || 0}
+                        </span>
+                        <span title="Interesados">
+                           <i class="fa-solid fa-user-check"></i> 
+                           ${post.interested?.length || 0}
+                        </span>
+                    </div>
+                    ${user.role === 'user' ? `<div class="post-footer">${actionButton}</div>` : ''}
                 </div>
             </div>
         </div>
-    `}).join('');
+    `;}).join('');
 
     postsListEl.querySelectorAll('.edit-btn').forEach(btn => {
         btn.onclick = () => location.hash = `#/dashboard/my-posts/edit/${btn.dataset.id}`;

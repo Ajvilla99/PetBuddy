@@ -7,7 +7,7 @@ import { renderNotFound } from './notFound.js';
  * Displays the form to edit an existing user, fitting the new UI design.
  */
 export async function showEditUser(userId) {
-    const currentUser = auth.getUser();
+    const currentUser = await auth.getUser();
     if (currentUser.role !== 'admin') {
         renderForbidden();
         return;

@@ -118,3 +118,39 @@
     -moz-appearance: none;
     appearance: none;
 }
+
+
+
+/* styles.css | http://localhost:5173/app/styles/styles.css */
+
+.login-form-container h2 {
+  /* color: var(--text-primary); */
+  /* color: var(--text-); */
+  color: var(--warning-color);
+}
+
+.login-form-container label {
+  /* color: var(--text-secondary); */
+  color: var(--background-primary);
+}
+
+.login-form-container {
+  /* gap: 20px; */
+  flex-shrink: 0;
+  flex-basis: 500px;
+}
+
+.login-page-container {
+  /* padding: 20px; */
+  padding: 20px 6vw;
+}
+
+.btn-primary:hover {
+  /* background: var(--primary-hover); */
+  background-color: var(--accent-color);
+}
+
+.btn-primary {
+  /* background: var(--primary-color); */
+  background: var(--warning-color);
+}

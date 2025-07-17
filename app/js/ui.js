@@ -3,10 +3,10 @@ import { auth } from './auth.js';
 let isAppLayoutRendered = false;
 
 export const ui = {
-    renderAppLayout() {
+    async renderAppLayout() {
         if (isAppLayoutRendered) return;
 
-        const user = auth.getUser();
+        const user = await auth.getUser();
         if (!user) return;
 
         const adminHeader = user.role === 'admin'
@@ -20,7 +20,7 @@ export const ui = {
             <a href="#/dashboard" class="nav-btn" data-link><i class="fa-solid fa-house"></i> <span>Dashboard</span></a>
             <a href="#/dashboard/interested-posts" class="nav-btn" data-link><i class="fa-solid fa-heart"></i> <span>Interesados</span></a>
             <a href="#/dashboard/my-posts" class="nav-btn" data-link><i class="fa-solid fa-user"></i> <span>Mis Posts</span></a>
-            <a href="#/dashboard/my-posts/create-post" class="nav-btn create-post-main-btn" data-link><i class="fa-solid fa-plus-circle"></i> <span>Crear Post</span></a>
+            <a href="#/dashboard/create-post" class="nav-btn create-post-main-btn" data-link><i class="fa-solid fa-plus-circle"></i> <span>Crear Post</span></a>
         `;
 
         if (user.role === 'admin') {
@@ -38,7 +38,7 @@ export const ui = {
                             <img src="https://i.pravatar.cc/150?u=${user.email}" alt="User" class="profile-img">
                             <div class="user-info">
                                 <h3>${user.name}</h3>
-                                <p>${user.role}</p>
+                                <p>${user.email}</p>
                             </div>
                         </div>
                         <nav class="sidebar-nav">${navLinks}</nav>
@@ -61,7 +61,6 @@ export const ui = {
                     <div class="sidebar-sticky-content">
                         <h3>Tendencias</h3>
                         <p>Contenido a pensar...</p>
-                        <!-- Aquí podrías poner hashtags populares, usuarios sugeridos, etc. -->
                     </div>
                 </aside>
             </div>
@@ -83,7 +82,8 @@ export const ui = {
         document.getElementById('app').innerHTML = '';
     },
     
-    updateNavActiveState(path) {
+    async updateNavActiveState(path) {
+        let u = await auth.getUser();
         if (!isAppLayoutRendered) return;
         
         document.querySelectorAll('.sidebar-nav .nav-btn').forEach(btn => {
@@ -94,7 +94,10 @@ export const ui = {
             }
         });
         if (path === '#/dashboard') {
-            document.querySelector('.nav-btn[href="#/dashboard"]').classList.add('active');
+            
+            u.role === 'admin'
+                ? document.querySelector('.nav-btn[href="#/dashboard"]').classList.add('active')
+                : '';
         }
     }
 };

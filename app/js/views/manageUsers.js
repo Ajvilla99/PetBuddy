@@ -8,7 +8,7 @@ import { renderForbidden } from './forbidden.js';
  * If the user is not an admin, it renders a forbidden view.
  */
 export async function showManageUsers() {
-    const user = auth.getUser();
+    const user = await auth.getUser();
     if (user.role !== 'admin') {
         renderForbidden();
         return;
