@@ -1,16 +1,21 @@
-
 import { api } from '../api.js';
 import { auth } from '../auth.js';
 import { formatDateTime, getRelativeTime, toggleLike, renderActionButton, toggleInterested } from '../utils.js';
 
-
 export async function showDashboard() {
     const user = await auth.getUser();
-    if (!user) return; 
+    if (!user) return;
 
-    user.role === 'admin' ? document.getElementById('view-title').textContent = 'Dashboard' : ''
     const contentEl = document.getElementById('app-content');
+    if (!contentEl) {
+        console.error('Dashboard Error: #app-content element not found in the DOM.');
+        return;
+    }
 
+    if (user.role === 'admin') {
+        const titleEl = document.getElementById('view-title');
+        if (titleEl) titleEl.textContent = 'Dashboard';
+    }
 
     const allPosts = await api.get('/posts');
     const filteredPosts = allPosts.filter(post => post.user !== user.name && post.user !== user.email);
@@ -28,47 +33,41 @@ export async function showDashboard() {
             </div>`;
     } else {
         postsListHtml = filteredPosts.map(post => {
-    const isLiked = post.likes?.includes(user.email);
-    const actionButton = renderActionButton(post, user); 
+            const isLiked = post.likes?.includes(user.email);
+            const actionButton = renderActionButton(post, user);
+            const imageHtml = post.imageUrl ? `<div class="user-post-images"><img src="${post.imageUrl}" alt="Imagen del post"></div>` : '';
 
-    const imageHtml = post.imageUrl
-        ? `<div class="user-post-images"><img src="${post.imageUrl}" alt="Imagen del post"></div>`
-        : '';
-
-    return `
-    <div class="user-post">
-        <div class="user-post-header">
-            <img src="https://i.pravatar.cc/150?u=${post.user}" alt="Avatar de ${post.user}">
-        </div>
-        <div class="user-post-content">
-            <div class="user-post-title">
-                <div>
-                    <strong>${post.user}</strong>
-                    <small class="post-relative-time" title="${formatDateTime(post.createdAt)}"> · ${getRelativeTime(post.createdAt)}</small>
+            return `
+            <div class="user-post">
+                <div class="user-post-header">
+                    <img src="https://i.pravatar.cc/150?u=${post.user}" alt="Avatar de ${post.user}">
                 </div>
-            </div>
-            
-            <h3>${post.title}</h3>
-            <p>${post.description}</p>
-            
-            ${imageHtml}
-            
-            <div class="user-post-actions">
-                <div class="post-meta">
-                    <span title="Likes" class="like-btn-container">
-                       <i class="fa-solid fa-heart like-btn ${isLiked ? 'liked' : ''}" data-id="${post.id}"></i> 
-                       ${post.likes?.length || 0}
-                    </span>
-                    <span title="Interesados">
-                       <i class="fa-solid fa-user-check"></i> 
-                       ${post.interested?.length || 0}
-                    </span>
+                <div class="user-post-content">
+                    <div class="user-post-title">
+                        <div>
+                            <strong>${post.user}</strong>
+                            <small class="post-relative-time" title="${formatDateTime(post.createdAt)}"> · ${getRelativeTime(post.createdAt)}</small>
+                        </div>
+                    </div>
+                    <h3>${post.title}</h3>
+                    <p>${post.description}</p>
+                    ${imageHtml}
+                    <div class="user-post-actions">
+                        <div class="post-meta">
+                            <span title="Likes" class="like-btn-container">
+                               <i class="fa-solid fa-heart like-btn ${isLiked ? 'liked' : ''}" data-id="${post.id}"></i> 
+                               ${post.likes?.length || 0}
+                            </span>
+                            <span title="Interesados">
+                               <i class="fa-solid fa-user-check"></i> 
+                               ${post.interested?.length || 0}
+                            </span>
+                        </div>
+                        ${user.role === 'user' ? `<div class="post-footer">${actionButton}</div>` : ''}
+                    </div>
                 </div>
-                ${user.role === 'user' ? `<div class="post-footer">${actionButton}</div>` : ''}
-            </div>
-        </div>
-    </div>`;
-}).join('');
+            </div>`;
+        }).join('');
     }
 
     contentEl.innerHTML = `
@@ -83,7 +82,6 @@ export async function showDashboard() {
                     <button type="submit">Postear</button>
                 </form>
             </div>
-
             <div class="user-posts">
                 ${postsListHtml}
             </div>
@@ -99,9 +97,8 @@ export async function showDashboard() {
         });
     }
 
-   
     const createPostForm = document.getElementById('dashboard-create-post-form');
-    if(createPostForm) {
+    if (createPostForm) {
         createPostForm.onsubmit = (e) => {
             e.preventDefault();
             alert("Para crear un post completo con título, categoría y fecha, serás redirigido.");
