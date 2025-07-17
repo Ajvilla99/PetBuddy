@@ -6,31 +6,21 @@ import { api } from '../api.js';
 import { auth } from '../auth.js';
 import { formatDateTime, getRelativeTime, toggleLike, renderActionButton, toggleInterested } from '../utils.js';
 
-/**
- * Muestra el dashboard principal: un feed con los posts de otros usuarios.
- * FUSIONADO: Utiliza la estructura del contenido central de Abraham (formulario + lista de posts)
- * y la llena con la lógica de datos y funcionalidad de la versión HEAD.
- */
-export async function showDashboard() {
-    // EVIDENCIA: Se obtiene el usuario actual para personalizar la UI y filtrar posts.
-    const user = auth.getUser();
-    if (!user) return; // Salvaguarda.
 
-    // EVIDENCIA: De acuerdo a la arquitectura en `router.js` y `ui.js`, las vistas
-    // actualizan el título y renderizan su contenido en `#app-content`, no en `#app`.
+export async function showDashboard() {
+    const user = auth.getUser();
+    if (!user) return; 
+
     user.role === 'admin' ? document.getElementById('view-title').textContent = 'Dashboard' : ''
     const contentEl = document.getElementById('app-content');
-    contentEl.innerHTML = ''; // Limpiar el contenido previo para evitar duplicados.
+    contentEl.innerHTML = '';
 
-    // EVIDENCIA: Lógica de `HEAD` para obtener todos los posts y filtrarlos para
-    // no mostrar los del propio usuario, creando el "feed principal".
+
     const allPosts = await api.get('/posts');
     const filteredPosts = allPosts.filter(post => post.user !== user.name && post.user !== user.email);
 
     let postsListHtml;
 
-    // EVIDENCIA: Se mantiene la lógica de `HEAD` para el caso de no encontrar posts,
-    // pero se adapta para mostrar un mensaje más amigable dentro del layout.
     if (filteredPosts.length === 0) {
         postsListHtml = `
             <div class="no-posts" style="grid-column: 1 / -1; text-align: center; padding: 40px; border: 1px dashed var(--border-color); margin-top: 20px; border-radius: 8px;">
@@ -41,13 +31,11 @@ export async function showDashboard() {
                 </div>
             </div>`;
     } else {
-        // EVIDENCIA: Se usa el `.map()` de `HEAD` para generar los posts dinámicamente.
         postsListHtml = filteredPosts.map(post => {
     const isInterested = post.interested?.includes(user.email);
     const isLiked = post.likes?.includes(user.email);
-    const actionButton = renderActionButton(post, user); // Ya no se necesita isPast
+    const actionButton = renderActionButton(post, user); 
 
-    // EVIDENCIA: Condicional para renderizar la imagen si existe.
     const imageHtml = post.imageUrl
         ? `<div class="user-post-images"><img src="${post.imageUrl}" alt="Imagen del post"></div>`
         : '';
@@ -88,9 +76,7 @@ export async function showDashboard() {
     </div>`;
 }).join('');
     }
-    
-    // EVIDENCIA: Se renderiza el layout del contenido central de Abraham, que incluye
-    // el formulario para crear un post y el contenedor para la lista de posts.
+
     contentEl.innerHTML = `
         <div class="content-posts">
             <div class="user-post-container">
@@ -111,8 +97,6 @@ export async function showDashboard() {
         <aside class="aside-right">[CONTENIDO A PENSAR]</aside>
     `;
 
-    // EVIDENCIA: Se adjuntan los listeners de eventos de `HEAD` después de renderizar el HTML.
-    // Esto asegura que los botones de 'like' e 'interesado' sean funcionales.
     if (user.role === 'user') {
         contentEl.querySelectorAll('.interested-btn').forEach(btn => {
             btn.onclick = () => toggleInterested(btn.dataset.id, user.email, showDashboard);
@@ -122,14 +106,11 @@ export async function showDashboard() {
         });
     }
 
-    // EVIDENCIA: Se añade la lógica para el formulario de creación rápida de post.
-    // Al no tener todos los campos, podríamos redirigir a la vista de creación completa.
+   
     const createPostForm = document.getElementById('dashboard-create-post-form');
     if(createPostForm) {
         createPostForm.onsubmit = (e) => {
             e.preventDefault();
-            // Opción 1: Crear un post simple (requeriría ajustar la API/DB).
-            // Opción 2 (Recomendada): Redirigir a la vista de creación completa.
             alert("Para crear un post completo con título, categoría y fecha, serás redirigido.");
             location.hash = '#/dashboard/my-posts/create-post';
         };

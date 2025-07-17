@@ -43,7 +43,6 @@ export function getRelativeTime(timestamp) {
         } else if (days === 1) {
             return "ayer";
         } else {
-             // Para fechas más lejanas, muestra la fecha en formato corto.
             return postDate.toLocaleDateString('es-ES', { month: 'short', day: 'numeric' });
         }
     } catch (error) {
@@ -93,7 +92,6 @@ export async function toggleInterested(postId, userEmail, callback) {
 }
 
 export function renderActionButton(post, user) {
-    // La lógica de 'isPast' ya no es relevante aquí
     if (user.role !== 'user') return '';
     
     const isInterested = Array.isArray(post.interested) && post.interested.includes(user.email);
