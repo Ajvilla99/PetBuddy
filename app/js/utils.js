@@ -7,64 +7,44 @@ import { api } from './api.js';
  * @param {string} time - Time in HH:MM format
  * @returns {string} - Formatted date and time string
  */
-export function formatDateTime(date, time) {
-    if (!date || !time) return 'Date TBD';
-    
+export function formatDateTime(timestamp) {
+    if (!timestamp) return 'Date TBD';
     try {
-        const dateObj = new Date(date + 'T' + time);
-        const options = {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit'
-        };
-        return dateObj.toLocaleDateString('en-EN', options);
+        const dateObj = new Date(timestamp);
+        return dateObj.toLocaleString('es-ES', {
+            year: 'numeric', month: 'long', day: 'numeric',
+            hour: '2-digit', minute: '2-digit'
+        });
     } catch (error) {
         return 'Invalid date';
     }
 }
 
-/**
- * Checks if an post is in the past
- * @param {string} date - Date in YYYY-MM-DD format
- * @param {string} time - Time in HH:MM format
- * @returns {boolean} - True if the post is in the past
- */
-export function isPostPast(date, time) {
-    if (!date || !time) return false;
-    
-    try {
-        const postDate = new Date(date + 'T' + time);
-        return postDate <= new Date();
-    } catch (error) {
-        return false;
-    }
-}
 
-/**
- * Gets a relative time description (e.g., "In 2 days", "Yesterday")
- * @param {string} date - Date in YYYY-MM-DD format
- * @param {string} time - Time in HH:MM format
- * @returns {string} - Relative time description
- */
-export function getRelativeTime(date, time) {
-    if (!date || !time) return '';
-    
+export function getRelativeTime(timestamp) {
+    if (!timestamp) return '';
     try {
-        const postDate = new Date(date + 'T' + time);
         const now = new Date();
-        const diffMs = postDate - now;
-        const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
-        
-        if (diffDays < 0) {
-            return diffDays === -1 ? 'Yesterday' : `${Math.abs(diffDays)} days ago`;
-        } else if (diffDays === 0) {
-            return 'Today';
-        } else if (diffDays === 1) {
-            return 'Tomorrow';
+        const postDate = new Date(timestamp);
+        const seconds = Math.round((now - postDate) / 1000);
+
+        const minutes = Math.round(seconds / 60);
+        const hours = Math.round(minutes / 60);
+        const days = Math.round(hours / 24);
+
+        if (seconds < 5) {
+            return "justo ahora";
+        } else if (seconds < 60) {
+            return `${seconds}s`;
+        } else if (minutes < 60) {
+            return `${minutes}m`;
+        } else if (hours < 24) {
+            return `${hours}h`;
+        } else if (days === 1) {
+            return "ayer";
         } else {
-            return `In ${diffDays} days`;
+             // Para fechas más lejanas, muestra la fecha en formato corto.
+            return postDate.toLocaleDateString('es-ES', { month: 'short', day: 'numeric' });
         }
     } catch (error) {
         return '';
@@ -99,10 +79,6 @@ export async function toggleLike(postId, userEmail, callback) {
 export async function toggleInterested(postId, userEmail, callback) {
     const post = await api.get(`/posts/${postId}`);
     if (!post.interested) post.interested = [];
-    if (isPostPast(post.date, post.time)) {
-        alert('Cannot change interest for past posts.');
-        return;
-    }
     const isInterested = post.interested.includes(userEmail);
     if (isInterested) {
         post.interested = post.interested.filter(email => email !== userEmail);
@@ -116,22 +92,14 @@ export async function toggleInterested(postId, userEmail, callback) {
     if (typeof callback === 'function') callback();
 }
 
-/**
- * Render the interested button HTML for a post and user.
- * @param {object} post
- * @param {object} user
- * @param {boolean} isPast
- * @returns {string}
- */
-export function renderActionButton(post, user, isPast) {
+export function renderActionButton(post, user) {
+    // La lógica de 'isPast' ya no es relevante aquí
     if (user.role !== 'user') return '';
-    if (isPast) {
-        return `<button class="btn-secondary" disabled>Post Finished</button>`;
-    }
+    
     const isInterested = Array.isArray(post.interested) && post.interested.includes(user.email);
     if (isInterested) {
-        return `<button class="btn-danger interested-btn" data-id="${post.id}" data-interested="true">Not interested</button>`;
+        return `<button class="btn-danger interested-btn" data-id="${post.id}">Ya no me interesa</button>`;
     } else {
-        return `<button class="btn-primary interested-btn" data-id="${post.id}" data-interested="false">I'm interested!</button>`;
+        return `<button class="btn-primary interested-btn" data-id="${post.id}">¡Me interesa!</button>`;
     }
 }

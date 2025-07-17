@@ -14,7 +14,8 @@ export async function showCreateUser() {
         return;
     }
 
-    document.getElementById('view-title').textContent = 'Create a New User';
+    user.role === 'admin' ? document.getElementById('view-title').textContent = 'Create a New User' : '';
+
     const contentEl = document.getElementById('app-content');
     
     const users = await api.get('/users');

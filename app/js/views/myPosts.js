@@ -1,7 +1,7 @@
 import { api } from '../api.js';
 import { auth } from '../auth.js';
 import { renderForbidden } from './forbidden.js';
-import { formatDateTime, isPostPast, getRelativeTime, toggleLike} from '../utils.js';
+import { formatDateTime, getRelativeTime, toggleLike} from '../utils.js';
 
 /**
  * Displays the posts created by the logged-in user.
@@ -13,7 +13,8 @@ export async function showMyPosts() {
         renderForbidden();
         return;
     }
-    document.getElementById('view-title').textContent = 'My Posts';
+    user.role === 'admin' ? document.getElementById('view-title').textContent = 'My Posts' : '';
+
     const contentEl = document.getElementById('app-content');
     contentEl.innerHTML = `<div class="posts-list"></div>`;
 
@@ -34,13 +35,11 @@ export async function showMyPosts() {
     }
 
     postsListEl.innerHTML = posts.map(post => {
-        const isPast = isPostPast(post.date, post.time);
         const isLiked = post.likes && post.likes.includes(user.email);
         return `
-        <div class="post-item ${isPast ? 'past-post' : ''}">
+        <div class="post-item">
             <div class="post-header">
                 <span class="post-category">${post.category || 'General'}</span>
-                ${isPast ? '<span class="post-status past">Past Post</span>' : ''}
                 <div class="post-actions">
                     <button class="edit-btn" title="Edit post" data-id="${post.id}"><i class="fa-solid fa-pencil"></i></button>
                     <button class="delete-btn" title="Delete post" data-id="${post.id}"><i class="fa-solid fa-trash"></i></button>

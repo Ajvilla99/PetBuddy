@@ -93,3 +93,60 @@
     padding-top: 20px;
     border-top: 3px solid var(--border-color);
 }
+
+/* Sobrescribir el #app para que no sea flex */
+
+
+/* Contenedor principal para centrar el layout de 3 columnas */
+.app-container {
+    display: flex;
+    justify-content: center;
+    max-width: 1300px;
+    margin: 0 auto;
+    gap: 20px;
+    padding: 0 10px;
+}
+
+/* Definición de las 3 columnas */
+.left-column {
+    flex: 0 0 280px; /* Ancho fijo para la barra de navegación */
+}
+
+.main-column {
+    flex: 1 1 600px; /* Ancho flexible, base de 600px */
+    border-left: 1px solid var(--border-color);
+    border-right: 1px solid var(--border-color);
+    min-width: 0; /* Importante para que flexbox maneje el encogimiento */
+}
+
+.right-column {
+    flex: 0 0 320px; /* Ancho fijo para la barra de tendencias */
+    display: block; /* Asegurarse que se muestre */
+}
+
+/* Para que el contenido de las sidebars se quede fijo al hacer scroll */
+.sidebar-sticky-content {
+    position: sticky;
+    top: 20px;
+}
+
+/* Ocultar columnas en pantallas más pequeñas (Responsive) */
+@media (max-width: 1024px) {
+    .right-column {
+        display: none;
+    }
+}
+
+@media (max-width: 767px) {
+    .left-column .user-info, .left-column .sidebar-footer span, .left-column .nav-btn span {
+        display: none; /* Oculta el texto, deja solo los iconos */
+    }
+    .left-column {
+        flex: 0 0 80px; /* Ancho de solo iconos */
+        align-items: center;
+    }
+    .app-container {
+        gap: 0;
+        padding: 0;
+    }
+}

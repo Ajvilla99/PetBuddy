@@ -4,7 +4,7 @@
 // para la funcionalidad de datos, formato de fechas e interactividad.
 import { api } from '../api.js';
 import { auth } from '../auth.js';
-import { formatDateTime, isPostPast, getRelativeTime, toggleLike, renderActionButton, toggleInterested } from '../utils.js';
+import { formatDateTime, getRelativeTime, toggleLike, renderActionButton, toggleInterested } from '../utils.js';
 
 /**
  * Muestra el dashboard principal: un feed con los posts de otros usuarios.
@@ -18,7 +18,7 @@ export async function showDashboard() {
 
     // EVIDENCIA: De acuerdo a la arquitectura en `router.js` y `ui.js`, las vistas
     // actualizan el título y renderizan su contenido en `#app-content`, no en `#app`.
-    document.getElementById('view-title').textContent = 'Dashboard';
+    user.role === 'admin' ? document.getElementById('view-title').textContent = 'Dashboard' : ''
     const contentEl = document.getElementById('app-content');
     contentEl.innerHTML = ''; // Limpiar el contenido previo para evitar duplicados.
 
@@ -43,53 +43,50 @@ export async function showDashboard() {
     } else {
         // EVIDENCIA: Se usa el `.map()` de `HEAD` para generar los posts dinámicamente.
         postsListHtml = filteredPosts.map(post => {
-            // Lógica de estado de `HEAD` para cada post.
-            const isInterested = post.interested?.includes(user.email);
-            const isLiked = post.likes?.includes(user.email);
-            const isPast = isPostPast(post.date, post.time);
-            const actionButton = renderActionButton(post, user, isPast);
+    const isInterested = post.interested?.includes(user.email);
+    const isLiked = post.likes?.includes(user.email);
+    const actionButton = renderActionButton(post, user); // Ya no se necesita isPast
 
-            // EVIDENCIA: Se usa la ESTRUCTURA HTML de la tarjeta de post de Abraham (`user-post`)
-            // para asegurar la consistencia con los estilos de `dashboard.css`.
-            return `
-            <div class="user-post ${isPast ? 'past-post' : ''}">
-                <div class="user-post-header">
-                    <img src="https://i.pravatar.cc/150?u=${post.user}" alt="Avatar de ${post.user}">
-                </div>
-                <div class="user-post-content">
-                    <div class="user-post-title">
-                        <div>
-                            <strong>${post.user || 'Usuario Anónimo'}</strong>
-                            <small class="post-relative-time" title="Fecha de publicación"> · ${getRelativeTime(post.date, post.time)}</small>
-                        </div>
-                        <!-- Aquí podría ir el menú de opciones '...' si es necesario -->
-                    </div>
-                    
-                    <h3>${post.title || 'Sin Título'}</h3>
-                    <p>${post.description || 'No hay descripción disponible.'}</p>
-                    
-                    <div class="post-datetime">
-                        <span title="Fecha del post">
-                            <i class="fa-solid fa-calendar-days"></i> ${formatDateTime(post.date, post.time)}
-                        </span>
-                    </div>
+    // EVIDENCIA: Condicional para renderizar la imagen si existe.
+    const imageHtml = post.imageUrl
+        ? `<div class="user-post-images"><img src="${post.imageUrl}" alt="Imagen del post"></div>`
+        : '';
 
-                    <div class="user-post-actions">
-                        <div class="post-meta">
-                            <span title="Likes" class="like-btn-container">
-                               <i class="fa-solid fa-heart like-btn ${isLiked ? 'liked' : ''}" data-id="${post.id}"></i> 
-                               ${post.likes?.length || 0}
-                            </span>
-                            <span title="Interesados">
-                               <i class="fa-solid fa-user-check"></i> 
-                               ${post.interested?.length || 0}
-                            </span>
-                        </div>
-                        ${user.role === 'user' ? `<div class="post-footer">${actionButton}</div>` : ''}
-                    </div>
+    return `
+    <div class="user-post">
+        <div class="user-post-header">
+            <img src="https://i.pravatar.cc/150?u=${post.user}" alt="Avatar de ${post.user}">
+        </div>
+        <div class="user-post-content">
+            <div class="user-post-title">
+                <div>
+                    <strong>${post.user}</strong>
+                    <!-- EVIDENCIA: Se llama a la nueva función getRelativeTime -->
+                    <small class="post-relative-time" title="${formatDateTime(post.createdAt)}"> · ${getRelativeTime(post.createdAt)}</small>
                 </div>
-            </div>`;
-        }).join('');
+            </div>
+            
+            <h3>${post.title}</h3>
+            <p>${post.description}</p>
+            
+            ${imageHtml}
+            
+            <div class="user-post-actions">
+                <div class="post-meta">
+                    <span title="Likes" class="like-btn-container">
+                       <i class="fa-solid fa-heart like-btn ${isLiked ? 'liked' : ''}" data-id="${post.id}"></i> 
+                       ${post.likes?.length || 0}
+                    </span>
+                    <span title="Interesados">
+                       <i class="fa-solid fa-user-check"></i> 
+                       ${post.interested?.length || 0}
+                    </span>
+                </div>
+                ${user.role === 'user' ? `<div class="post-footer">${actionButton}</div>` : ''}
+            </div>
+        </div>
+    </div>`;
+}).join('');
     }
     
     // EVIDENCIA: Se renderiza el layout del contenido central de Abraham, que incluye

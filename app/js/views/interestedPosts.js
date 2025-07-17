@@ -2,7 +2,6 @@ import { api } from '../api.js';
 import { auth } from '../auth.js';
 import {
     formatDateTime,
-    isPostPast,
     getRelativeTime,
     toggleLike,
     renderActionButton,
@@ -15,7 +14,8 @@ import {
  */
 export async function showInterestedPosts() {
     const user = auth.getUser();
-    document.getElementById('view-title').textContent = 'Interested Posts';
+    user.role === 'admin' ? document.getElementById('view-title').textContent = 'Interested Posts' : '';
+
     const contentEl = document.getElementById('app-content');
 
     contentEl.innerHTML = `<div class="posts-list"></div>`;
@@ -42,18 +42,12 @@ export async function showInterestedPosts() {
 
     postsListEl.innerHTML = posts
         .map((post) => {
-            const isPast = isPostPast(post.date, post.time);
             const isLiked = post.likes && post.likes.includes(user.email);
-            const actionButton = renderActionButton(post, user, isPast);
+            const actionButton = renderActionButton(post, user);
             return `
-        <div class="post-item ${isPast ? 'past-post' : ''}">
+        <div class="post-item">
             <div class="post-header">
                 <span class="post-category">${post.category || 'General'}</span>
-                ${
-                    isPast
-                        ? '<span class="post-status past">Past Post</span>'
-                        : ''
-                }
             </div>
             <div class="post-content">
                 <h3 class="post-name">${post.title || 'No Title'}</h3>

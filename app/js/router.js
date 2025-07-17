@@ -106,9 +106,9 @@ export async function router() {
         view(params);
         
         // After rendering the view, tell the UI module to update the nav state
-        // if (isAuthenticated) {
-        //     ui.updateNavActiveState(path);
-        // }
+        if (isAuthenticated) {
+            ui.updateNavActiveState(path);
+        }
     } else {
         // If no route matched, render the not found view
         renderNotFound();

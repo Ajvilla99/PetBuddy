@@ -39,12 +39,12 @@
   "posts": [
     {
       "id": "5bfc",
-      "title": "asda",
-      "description": "sadas",
-      "category": "adsas",
-      "date": "2025-07-25",
-      "time": "00:12",
+      "title": "¡Encontré este perrito perdido!",
+      "description": "Estaba deambulando cerca del parque central. Es muy amigable y parece bien cuidado. ¿Alguien lo reconoce?",
+      "category": "Mascota Encontrada",
       "user": "Juan Perez",
+      "createdAt": "2024-05-20T14:30:00.000Z",
+      "imageUrl": "https://images.pexels.com/photos/1108099/pexels-photo-1108099.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
       "likes": [
         "adsa@gmail.com"
       ],
@@ -54,25 +54,29 @@
     },
     {
       "id": "6a6b",
-      "title": "Hola",
-      "description": "hola",
-      "category": "hola",
-      "date": "2025-07-25",
-      "time": "17:42",
+      "title": "Gatita en adopción responsable",
+      "description": "Esta pequeña necesita un hogar. Tiene unos 3 meses, está desparasitada. Muy juguetona.",
+      "category": "Adopción",
       "user": "Antonio Santiago",
+      "createdAt": "2024-05-21T09:15:10.000Z",
+      "imageUrl": "https://images.pexels.com/photos/45201/kitty-cat-kitten-pet-45201.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
       "likes": [
         "adsa@gmail.com"
-      ]
+      ],
+      "interested": []
     },
     {
       "id": "0124",
-      "title": "21",
-      "description": "212",
-      "category": "121",
-      "date": "2025-07-24",
-      "time": "00:12",
+      "title": "Consejos para el primer viaje en coche",
+      "description": "Voy a viajar con mi perro por primera vez, ¿algún consejo para que no se maree?",
+      "category": "Consejos",
       "user": "Antonio Santiago",
-      "likes": []
+      "createdAt": "2024-05-21T11:05:00.000Z",
+      "imageUrl": "",
+      "likes": [
+        "juan.perez@user.com"
+      ],
+      "interested": []
     }
   ]
 }

@@ -16,7 +16,8 @@ export async function showEditPost(postId) {
         return;
     }
 
-    document.getElementById('view-title').textContent = 'Edit Post';
+    user.role === 'admin' ? document.getElementById('view-title').textContent = 'Edit post' : '';
+
     const contentEl = document.getElementById('app-content');
     
     const [post, users] = await Promise.all([

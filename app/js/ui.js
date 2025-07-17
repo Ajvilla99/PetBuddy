@@ -3,59 +3,73 @@ import { auth } from './auth.js';
 let isAppLayoutRendered = false;
 
 export const ui = {
-    /**
-     * Renders the main application layout if it hasn't been rendered yet.
-     */
     renderAppLayout() {
-        if (isAppLayoutRendered) {
-            return; // Do nothing if already rendered
-        }
+        if (isAppLayoutRendered) return;
 
         const user = auth.getUser();
-        if (!user) {
-            console.error("Attempted to render layout without a user.");
-            return;
-        }
+        if (!user) return;
 
-        // Define navigation links based on user role
+        // EVIDENCIA: Se define el contenido del header. Será un string vacío si el usuario no es admin.
+        const adminHeader = user.role === 'admin'
+            ? `
+            <header class="main-header">
+                <h1 id="view-title">Admin Dashboard</h1>
+            </header>`
+            : '';
+
         let navLinks = `
-            <a href="#/dashboard" class="nav-btn" data-link><i class="fa-solid fa-house"></i> Dashboard</a>
-            <a href="#/dashboard/interested-posts" class="nav-btn" data-link><i class="fa-solid fa-heart"></i> Interested Posts</a>
-            <a href="#/dashboard/my-posts" class="nav-btn" data-link><i class="fa-solid fa-user"></i> My Posts</a>
-            <a href="#/dashboard/my-posts/create-post" class="nav-btn" data-link><i class="fa-solid fa-plus-circle"></i> Create Post</a>
+            <a href="#/dashboard" class="nav-btn" data-link><i class="fa-solid fa-house"></i> <span>Dashboard</span></a>
+            <a href="#/dashboard/interested-posts" class="nav-btn" data-link><i class="fa-solid fa-heart"></i> <span>Interesados</span></a>
+            <a href="#/dashboard/my-posts" class="nav-btn" data-link><i class="fa-solid fa-user"></i> <span>Mis Posts</span></a>
+            <a href="#/dashboard/my-posts/create-post" class="nav-btn create-post-main-btn" data-link><i class="fa-solid fa-plus-circle"></i> <span>Crear Post</span></a>
         `;
+
         if (user.role === 'admin') {
             navLinks += `
-                <a href="#/dashboard/users" class="nav-btn" data-link><i class="fa-solid fa-users-cog"></i> Manage Users</a>
+                <a href="#/dashboard/users" class="nav-btn" data-link><i class="fa-solid fa-users-cog"></i> <span>Gestionar Usuarios</span></a>
             `;
         }
 
+        // EVIDENCIA: Se rediseña el HTML de #app para un layout de 3 columnas con un contenedor principal de 1300px.
         document.getElementById('app').innerHTML = `
-            <aside class="sidebar">
-                <div class="user-profile">
-                    <img src="https://i.pravatar.cc/150?u=${user.email}" alt="User" class="profile-img">
-                    <div class="user-info">
-                        <h3>${user.name}</h3>
-                        <p>${user.role}</p>
+            <div class="app-container">
+                <!-- Columna Izquierda: Navegación -->
+                <aside class="left-column">
+                    <div class="sidebar-sticky-content">
+                        <div class="user-profile">
+                            <img src="https://i.pravatar.cc/150?u=${user.email}" alt="User" class="profile-img">
+                            <div class="user-info">
+                                <h3>${user.name}</h3>
+                                <p>${user.role}</p>
+                            </div>
+                        </div>
+                        <nav class="sidebar-nav">${navLinks}</nav>
+                        <div class="sidebar-footer">
+                            <button id="logout-btn" class="nav-btn logout-btn">
+                                <i class="fa-solid fa-sign-out-alt"></i> <span>Logout</span>
+                            </button>
+                        </div>
                     </div>
-                </div>
-                <nav class="sidebar-nav">${navLinks}</nav>
-                <div class="sidebar-footer">
-                    <button id="logout-btn" class="nav-btn">
-                        <i class="fa-solid fa-sign-out-alt"></i> Logout
-                    </button>
-                </div>
-            </aside>
-            <main class="main-content">
-                <header class="main-header">
-                    <h1 id="view-title"></h1>
-                </header>
-                <div id="app-content" class="dashboard-content"></div>
-            </main>
+                </aside>
+
+                <!-- Columna Central: Contenido Principal -->
+                <main class="main-column">
+                    ${adminHeader}
+                    <div id="app-content"></div>
+                </main>
+
+                <!-- Columna Derecha: Contenido Adicional -->
+                <aside class="right-column">
+                    <div class="sidebar-sticky-content">
+                        <h3>Tendencias</h3>
+                        <p>Contenido a pensar...</p>
+                        <!-- Aquí podrías poner hashtags populares, usuarios sugeridos, etc. -->
+                    </div>
+                </aside>
+            </div>
         `;
 
         document.getElementById('logout-btn').onclick = auth.logout;
-        // Post listeners to handle navigation links
         document.querySelectorAll('[data-link]').forEach(link => {
             link.onclick = (e) => {
                 e.preventDefault();
@@ -66,18 +80,12 @@ export const ui = {
         isAppLayoutRendered = true;
     },
 
-    /**
-     * Resets the entire application UI, typically on logout.
-     */
+    // ... resto de las funciones de ui.js (resetLayout, updateNavActiveState) sin cambios ...
     resetLayout() {
         isAppLayoutRendered = false;
         document.getElementById('app').innerHTML = '';
     },
     
-    /**
-     * Updates the active state of the sidebar navigation.
-     * @param {string} path - The current URL hash path.
-     */
     updateNavActiveState(path) {
         if (!isAppLayoutRendered) return;
         

@@ -14,7 +14,8 @@ export async function showEditUser(userId) {
     }
 
     // Set the title in the main header
-    document.getElementById('view-title').textContent = 'Edit User';
+    user.role === 'admin' ? document.getElementById('view-title').textContent = 'Edit User' : '';
+
     const contentEl = document.getElementById('app-content');
     
     // Fetch user to edit and all users to get the available roles

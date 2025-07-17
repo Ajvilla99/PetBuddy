@@ -21,13 +21,13 @@
     color: var(--text-primary);
 }
 
-.dashboard-content {
+.dashboard-container {
     flex: 1;
     padding: 32px;
     overflow-y: auto;
 }
 
-.dashboard-content h2 {
+.dashboard-container h2 {
     font-size: 20px;
     font-weight: 600;
     color: var(--text-primary);

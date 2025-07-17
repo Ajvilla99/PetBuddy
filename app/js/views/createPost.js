@@ -14,7 +14,8 @@ export async function showCreatePost() {
         return;
     }
 
-    document.getElementById('view-title').textContent = 'Create a New Post';
+    user.role === 'admin' ? document.getElementById('view-title').textContent = 'Create a New Post' : '';
+
     const contentEl = document.getElementById('app-content');
 
     const users = await api.get('/users?role=user');
@@ -28,34 +29,24 @@ export async function showCreatePost() {
         <div class="form-container">
             <form id="create-post-form">
                 <div class="form-group">
-                    <label for="title">Post Title</label>
-                    <input id="title" placeholder="ex: Conference 2025" required>
+                    <label for="title">Título</label>
+                    <input id="title" placeholder="Ej: Cachorro en adopción" required>
                 </div>
                 <div class="form-group">
-                    <label for="description">Description</label>
-                    <textarea id="description" placeholder="A brief summary of the post content." required></textarea>
+                    <label for="description">Descripción</label>
+                    <textarea id="description" placeholder="Describe tu publicación..." required></textarea>
                 </div>
                 <div class="form-group">
-                    <label for="category">Category</label>
-                    <input id="category" placeholder="ex: Workshop" required>
+                    <label for="category">Categoría</label>
+                    <input id="category" placeholder="Ej: Adopción, Perdido, Consejo" required>
                 </div>
                 <div class="form-group">
-                    <label for="date">Post Date</label>
-                    <input type="date" id="date" required min="${new Date().toISOString().split('T')[0]}">
+                    <label for="imageUrl">URL de la Imagen (Opcional)</label>
+                    <input type="url" id="imageUrl" placeholder="https://ejemplo.com/imagen.jpg">
                 </div>
-                <div class="form-group">
-                    <label for="time">Post Time</label>
-                    <input type="time" id="time" required>
-                </div>
-                ${user.role === 'admin' ? `<div class="form-group">
-                    <label for="user">User</label>
-                    <select id="user" required>
-                        ${users.map(u => `<option value="${u.name}">${u.name}</option>`).join('')}
-                    </select>
-                </div>` : ''}
                 <div class="form-actions">
-                    <button type="submit" class="btn-primary">Save post</button>
-                    <button type="button" id="cancel-btn" class="btn-secondary">Cancel</button>
+                    <button type="submit" class="btn-primary">Publicar</button>
+                    <button type="button" id="cancel-btn" class="btn-secondary">Cancelar</button>
                 </div>
             </form>
         </div>`;
@@ -63,29 +54,20 @@ export async function showCreatePost() {
     document.getElementById('create-post-form').onsubmit = async (e) => {
         e.preventDefault();
         
-        // Validate that the date is in the future
-        const postDate = new Date(e.target.date.value + 'T' + e.target.time.value);
-        const now = new Date();
-        
-        if (postDate <= now) {
-            alert('Post date and time must be in the future.');
-            return;
-        }
-        
+        // EVIDENCIA: Se crea el timestamp en el momento del envío.
         const data = {
             title: e.target.title.value,
             description: e.target.description.value,
             category: e.target.category.value,
-            date: e.target.date.value,
-            time: e.target.time.value,
-            user: user.role === 'admin' ? e.target.user.value : user.name,
-            likes: []
+            imageUrl: e.target.imageUrl.value,
+            user: auth.getUser().name,
+            createdAt: new Date().toISOString(), // Timestamp automático
+            likes: [],
+            interested: []
         };
         await api.post('/posts', data);
         location.hash = '#/dashboard/my-posts';
     };
 
-    document.getElementById('cancel-btn').onclick = () => {
-        location.hash = '#/dashboard/my-posts';
-    };
+    document.getElementById('cancel-btn').onclick = () => location.hash = '#/dashboard/my-posts';
 }

@@ -24,8 +24,8 @@ A modern, full-featured **Single-Page Application (SPA)** for managing posts in 
 
 - **Name:** Walter
 - **Clan:** Tayrona
-- **Email:** waltertayrona@gmail.com
-- **GitHub:** [wtayrona](https://github.com/Wtayrona)
+- **Email:** walteralex0627@gmail.com
+- **GitHub:** [wtayrona](https://github.com/walex0627)
 
 ---
 

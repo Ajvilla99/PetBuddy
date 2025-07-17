@@ -14,7 +14,8 @@ export async function showManageUsers() {
         return;
     }
 
-    document.getElementById('view-title').textContent = 'Manage Users';
+    user.role === 'admin' ? document.getElementById('view-title').textContent = 'Manage Users' : '';
+
     const contentEl = document.getElementById('app-content');
 
     contentEl.innerHTML = `
