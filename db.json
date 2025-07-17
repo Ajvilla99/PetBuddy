@@ -34,6 +34,13 @@
       "email": "sdas@mail.com",
       "password": "a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3",
       "role": "user"
+    },
+    {
+      "id": "dd9f",
+      "name": "Andrés Fontalvo",
+      "email": "andres@mail.com",
+      "password": "f6af6e4d6c9315f6a693f27a4868f405edf15d97cbf661d8ac29071b2b6b5961",
+      "role": "user"
     }
   ],
   "posts": [
@@ -47,10 +54,12 @@
       "imageUrl": "https://images.pexels.com/photos/1108099/pexels-photo-1108099.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
       "likes": [
         "adsa@gmail.com",
-        "juan.perez@user.com"
+        "juan.perez@user.com",
+        "andres@mail.com"
       ],
       "interested": [
-        "adsa@gmail.com"
+        "adsa@gmail.com",
+        "andres@mail.com"
       ]
     },
     {
@@ -247,6 +256,17 @@
         "adsa@gmail.com",
         "juan.perez@user.com"
       ]
+    },
+    {
+      "id": "3bec",
+      "title": "Cachorro en adopción",
+      "description": "Hola, tengo este perrito para adoptar",
+      "category": "Adopción",
+      "imageUrl": "",
+      "user": "Andrés Fontalvo",
+      "createdAt": "2025-07-17T11:39:41.791Z",
+      "likes": [],
+      "interested": []
     }
   ]
 }

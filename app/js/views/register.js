@@ -13,22 +13,22 @@ export function showRegister() {
     document.getElementById('app').innerHTML = `
     <div class="login-page-container">
         <div class="login-form-container register-form">
-            <h2>Create an Account</h2>
+            <h2>Crear una Cuenta</h2>
             <form id="register-form">
                 <div class="form-group">
-                    <label for="name">Full Name</label>
+                    <label for="name">Nombre Completo</label>
                     <input type="text" id="name" placeholder="Juan Perez" required>
                 </div>
                 <div class="form-group">
-                    <label for="email">Email Address</label>
+                    <label for="email">Correo Electrónico</label>
                     <input type="email" id="email" placeholder="you@example.com" required>
                 </div>
                 <div class="form-group">
-                    <label for="password">Password</label>
+                    <label for="password">Contraseña</label>
                     <input type="password" id="password" placeholder="••••••••" required>
                 </div>
-                <button type="submit" class="btn-primary">Register</button>
-                <a href="#/login" class="switch-form-link" data-link>Already have an account? Login</a>
+                <button type="submit" class="btn-primary">Registrarse</button>
+                <a href="#/login" class="switch-form-link" data-link>¿Ya tienes una cuenta? Inicia Sesión</a>
             </form>
         </div>
     </div>`;

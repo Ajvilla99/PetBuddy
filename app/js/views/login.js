@@ -13,18 +13,18 @@ export function showLogin() {
     document.getElementById('app').innerHTML = `
     <div class="login-page-container">
       <div class="login-form-container">
-        <h2>Welcome Back!</h2>
+        <h2>Bienvenido!</h2>
         <form id="login-form">
           <div class="form-group">
-            <label for="email">Email Address</label>
+            <label for="email">Correo Electrónico</label>
             <input type="email" id="email" placeholder="you@example.com" required>
           </div>
           <div class="form-group">
-            <label for="password">Password</label>
+            <label for="password">Contraseña</label>
             <input type="password" id="password" placeholder="••••••••" required>
           </div>
-          <button type="submit" class="btn-primary">Login</button>
-          <a href="#/register" class="switch-form-link" data-link>Don't have an account? Register</a>
+          <button type="submit" class="btn-primary">Iniciar Sesión</button>
+          <a href="#/register" class="switch-form-link" data-link>No tienes una cuenta? Regístrate</a>
         </form>
       </div>
     </div>`;
