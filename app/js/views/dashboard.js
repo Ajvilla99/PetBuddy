@@ -1,7 +1,4 @@
-// app/js/views/dashboard.js
 
-// EVIDENCIA: Se mantienen todas las importaciones necesarias de la versión `HEAD` y `utils.js`
-// para la funcionalidad de datos, formato de fechas e interactividad.
 import { api } from '../api.js';
 import { auth } from '../auth.js';
 import { formatDateTime, getRelativeTime, toggleLike, renderActionButton, toggleInterested } from '../utils.js';

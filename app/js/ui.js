@@ -9,7 +9,6 @@ export const ui = {
         const user = auth.getUser();
         if (!user) return;
 
-        // EVIDENCIA: Se define el contenido del header. Será un string vacío si el usuario no es admin.
         const adminHeader = user.role === 'admin'
             ? `
             <header class="main-header">
@@ -30,7 +29,6 @@ export const ui = {
             `;
         }
 
-        // EVIDENCIA: Se rediseña el HTML de #app para un layout de 3 columnas con un contenedor principal de 1300px.
         document.getElementById('app').innerHTML = `
             <div class="app-container">
                 <!-- Columna Izquierda: Navegación -->
@@ -80,7 +78,6 @@ export const ui = {
         isAppLayoutRendered = true;
     },
 
-    // ... resto de las funciones de ui.js (resetLayout, updateNavActiveState) sin cambios ...
     resetLayout() {
         isAppLayoutRendered = false;
         document.getElementById('app').innerHTML = '';

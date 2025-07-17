@@ -54,7 +54,6 @@ export async function showCreatePost() {
     document.getElementById('create-post-form').onsubmit = async (e) => {
         e.preventDefault();
         
-        // EVIDENCIA: Se crea el timestamp en el momento del envío.
         const data = {
             title: e.target.title.value,
             description: e.target.description.value,
