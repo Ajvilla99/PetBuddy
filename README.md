@@ -4,14 +4,31 @@ A modern, full-featured **Single-Page Application (SPA)** for managing posts in 
 
 ---
 
-## 📋 Coder Information
+## 📋 Coders Information
+---
 
 - **Name:** Antonio Santiago
 - **Clan:** Macondo
 - **Email:** santiagor.acarlos@gmail.com
 - **GitHub:** [TonyS-dev](https://github.com/TonyS-dev)
 - **CodePen:** [TonyS-dev](https://codepen.io/TonyS-dev)
-- **ID:** 1192796292
+
+---
+
+- **Name:** Abrahan Villa
+- **Clan:** Manglar
+- **Email:** ajvilla1999@gmail.com
+- **GitHub:** [Ajvilla99](https://github.com/Ajvilla99)
+
+---
+
+- **Name:** Walter
+- **Clan:** Tayrona
+- **Email:** waltertayrona@gmail.com
+- **GitHub:** [wtayrona](https://github.com/Wtayrona)
+
+---
+
 
 ### 📋 Instructions
 
