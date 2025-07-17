@@ -1,19 +1,20 @@
 import { auth } from './auth.js';
 
-let isAppLayoutRendered = false;
+let isAppShellRendered = false;
 
 export const ui = {
-    async renderAppLayout() {
-        if (isAppLayoutRendered) return;
+    /**
+     * Renderiza el "cascarón" principal de la aplicación (sidebars, contenedores).
+     * Está diseñado para ejecutarse solo una vez por sesión de login.
+     */
+    async renderAppShell() {
+        if (isAppShellRendered) return;
 
         const user = await auth.getUser();
         if (!user) return;
 
         const adminHeader = user.role === 'admin'
-            ? `
-            <header class="main-header">
-                <h1 id="view-title">Admin Dashboard</h1>
-            </header>`
+            ? `<header class="main-header"><h1 id="view-title">Admin Dashboard</h1></header>`
             : '';
 
         let navLinks = `
@@ -24,14 +25,12 @@ export const ui = {
         `;
 
         if (user.role === 'admin') {
-            navLinks += `
-                <a href="#/dashboard/users" class="nav-btn" data-link><i class="fa-solid fa-users-cog"></i> <span>Gestionar Usuarios</span></a>
-            `;
+            navLinks += `<a href="#/dashboard/users" class="nav-btn" data-link><i class="fa-solid fa-users-cog"></i> <span>Gestionar Usuarios</span></a>`;
         }
 
         document.getElementById('app').innerHTML = `
             <div class="app-container">
-                <!-- Columna Izquierda: Navegación -->
+                <!-- Columna Izquierda: Navegación (Estática) -->
                 <aside class="left-column">
                     <div class="sidebar-sticky-content">
                         <div class="user-profile">
@@ -50,13 +49,13 @@ export const ui = {
                     </div>
                 </aside>
 
-                <!-- Columna Central: Contenido Principal -->
+                <!-- Columna Central: Contenido Principal (Dinámico) -->
                 <main class="main-column">
                     ${adminHeader}
                     <div id="app-content"></div>
                 </main>
 
-                <!-- Columna Derecha: Contenido Adicional -->
+                <!-- Columna Derecha: Contenido Adicional (Estática) -->
                 <aside class="right-column">
                     <div class="sidebar-sticky-content">
                         <h3>Tendencias</h3>
@@ -74,17 +73,22 @@ export const ui = {
             };
         });
 
-        isAppLayoutRendered = true;
+        isAppShellRendered = true;
     },
 
+    /**
+     * Resetea completamente el layout, usualmente al hacer logout.
+     */
     resetLayout() {
-        isAppLayoutRendered = false;
+        isAppShellRendered = false;
         document.getElementById('app').innerHTML = '';
     },
     
+    /**
+     * Actualiza el estado activo del botón de navegación actual.
+     */
     async updateNavActiveState(path) {
-        let u = await auth.getUser();
-        if (!isAppLayoutRendered) return;
+        if (!isAppShellRendered) return;
         
         document.querySelectorAll('.sidebar-nav .nav-btn').forEach(btn => {
             btn.classList.remove('active');
@@ -93,11 +97,12 @@ export const ui = {
                 btn.classList.add('active');
             }
         });
+
         if (path === '#/dashboard') {
-            
-            u.role === 'admin'
-                ? document.querySelector('.nav-btn[href="#/dashboard"]').classList.add('active')
-                : '';
+            const user = await auth.getUser();
+            if (user && user.role === 'admin') {
+                document.querySelector('.nav-btn[href="#/dashboard"]').classList.add('active');
+            }
         }
     }
 };

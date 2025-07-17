@@ -29,39 +29,30 @@ const routes = {
 export async function router() {
     const path = location.hash || '#/login';
     let isAuthenticated = auth.isAuthenticated();
-    let user = await auth.getUser();
-
-    if (isAuthenticated && user) {
-        try {
-            const verifiedUser = await api.get(`/users?email=${user.email}`);
-            if (!verifiedUser.length || verifiedUser[0].role !== user.role) {
-                throw new Error()
-            }
-        } catch {
-            localStorage.removeItem('user');
-            isAuthenticated = false;
-            user = null;
+    
+    if (isAuthenticated) {
+        // En lugar de llamar a ui.renderAppLayout() aquí,
+        // lo hacemos de forma más inteligente.
+        // Verificamos si el cascarón ya está en el DOM.
+        const appContainer = document.querySelector('.app-container');
+        if (!appContainer) {
+            // Si no existe, lo renderizamos. Esto solo pasará al loguearse
+            // o al refrescar la página estando logueado.
+            await ui.renderAppShell();
         }
     }
 
-    if (!isAuthenticated && document.querySelector('.app-container')) {
-        ui.resetLayout();
-    }
-
+    // --- Lógica de Protección de Rutas (sin cambios) ---
     if (path.startsWith('#/dashboard') && !isAuthenticated) {
         location.hash = '#/login';
         return;
     }
-
     if ((path === '#/login' || path === '#/register') && isAuthenticated) {
         location.hash = '#/dashboard';
         return;
     }
 
-    if (isAuthenticated) {
-        await ui.renderAppLayout();
-    }
-
+    // --- Route Matching (sin cambios) ---
     let view;
     let params = null;
 
@@ -74,13 +65,18 @@ export async function router() {
     } else {
         view = routes[path];
     }
-
+    
+    // --- Renderizado de Vistas ---
     if (view) {
-        view(params);
+        // Ahora, la función de vista se ejecuta sabiendo que #app-content ya existe.
+        view(params); 
+        
         if (isAuthenticated) {
             ui.updateNavActiveState(path);
         }
     } else {
-        renderNotFound();
+        // Si la ruta no autenticada no existe, renderiza el not found dentro de #app
+        const targetEl = isAuthenticated ? document.getElementById('app-content') : document.getElementById('app');
+        renderNotFound(targetEl);
     }
 }
