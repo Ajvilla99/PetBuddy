@@ -1,26 +1,25 @@
 import { api } from '../api.js';
 import { auth } from '../auth.js';
 import { renderForbidden } from './forbidden.js';
-import { formatDateTime, isPostPast, getRelativeTime } from '../utils.js';
+import { formatDateTime, getRelativeTime, toggleLike, renderActionButton} from '../utils.js';
 
 /**
- * Displays the user's interested posts.
- * Only accessible to users with the 'user' role.
- * If the user is not a user, it renders a forbidden view.
+ * Displays the posts created by the logged-in user.
+ * Only accessible to users with the 'user' or 'admin' role.
  */
 export async function showMyPosts() {
-    const user = auth.getUser();
-    if (user.role !== 'user') {
+    const user = await auth.getUser();
+    if (user.role !== 'user' && user.role !== 'admin') {
         renderForbidden();
         return;
     }
-    
-    document.getElementById('view-title').textContent = 'My posts';
+    user.role === 'admin' ? document.getElementById('view-title').textContent = 'My Posts' : '';
+
     const contentEl = document.getElementById('app-content');
-    contentEl.innerHTML = `<div class="posts-list"></div>`; // Placeholder
+    contentEl.innerHTML = `<div class="posts-list"></div>`;
 
     let posts = await api.get('/posts');
-    posts = posts.filter(a => Array.isArray(a.interested) && a.interested.includes(user.email));
+    posts = posts.filter(post => post.user === user.name || post.user === user.email);
 
     const postsListEl = contentEl.querySelector('.posts-list');
     if (posts.length === 0) {
@@ -28,35 +27,86 @@ export async function showMyPosts() {
             <div class="no-posts">
                 <div>
                     <i class="fa-solid fa-book-open-reader no-posts-icon"></i>
-                    <h3>You're Not interested in Any posts</h3>
-                    <p>Visit the 'View posts' page to find something new to discover!</p>
+                    <h3>You haven't created any posts</h3>
+                    <p>Use 'Create Post' to add your first post!</p>
                 </div>
             </div>`;
         return;
     }
 
     postsListEl.innerHTML = posts.map(post => {
-        const isPast = isPostPast(post.date, post.time);
-        
+        const isLiked = post.likes?.includes(user.email);
+        const actionButton = renderActionButton(post, user); 
+    
+        const imageHtml = post.imageUrl
+            ? `<div class="user-post-images"><img src="${post.imageUrl}" alt="Imagen del post"></div>`
+            : '';
+    
         return `
-        <div class="post-item ${isPast ? 'past-post' : ''}">
-            <div class="post-header">
-                <span class="post-category">${post.category || 'General'}</span>
-                ${isPast ? '<span class="post-status past">Past Post</span>' : ''}
+        <div class="user-post">
+            <div class="user-post-header">
+                <img src="https://i.pravatar.cc/150?u=${user.email}" alt="Avatar de ${post.user}">
             </div>
-            <div class="post-content">
-                <h3 class="post-name">${post.title || 'No Title'}</h3>
-                <p class="post-description">${post.description || 'No description available.'}</p>
-                <div class="post-datetime">
-                    <span class="post-date" title="Post Date and Time">
-                        <i class="fa-solid fa-calendar-days"></i> ${formatDateTime(post.date, post.time)}
-                    </span>
-                    <span class="post-relative-time">${getRelativeTime(post.date, post.time)}</span>
+            <div class="user-post-content">
+                <div class="user-post-title">
+                    <div>
+                        <strong>${post.user}</strong>
+                        <small class="post-relative-time" title="${formatDateTime(post.createdAt)}"> · ${getRelativeTime(post.createdAt)}</small>
+                    </div>
                 </div>
-                <div class="post-meta">
-                    <span title="organizer"><i class="fa-solid fa-chalkboard-user"></i> ${post.organizer || 'N/A'}</span>
+                
+                <h3>${post.title}</h3>
+                <p>${post.description}</p>
+                
+                ${imageHtml}
+                
+                <div class="user-post-actions">
+                    <div class="post-meta">
+                        <span title="Likes" class="like-btn-container">
+                           <i class="fa-solid fa-heart like-btn ${isLiked ? 'liked' : ''}" data-id="${post.id}"></i> 
+                           ${post.likes?.length || 0}
+                        </span>
+                        <span title="Interesados">
+                           <i class="fa-solid fa-user-check"></i> 
+                           ${post.interested?.length || 0}
+                        </span>
+                    </div>
+                    ${user.role === 'user' ? `<div class="post-footer">${actionButton}</div>` : ''}
                 </div>
             </div>
         </div>
-    `}).join('');
+    `;}).join('');
+
+    postsListEl.querySelectorAll('.edit-btn').forEach(btn => {
+        btn.onclick = () => location.hash = `#/dashboard/my-posts/edit/${btn.dataset.id}`;
+    });
+    postsListEl.querySelectorAll('.delete-btn').forEach(btn => {
+        btn.onclick = async () => {
+            if (confirm('Are you sure you want to delete this post?')) {
+                await api.delete(`/posts/${btn.dataset.id}`);
+                showMyPosts(); // Reload list
+            }
+        };
+    });
+    postsListEl.querySelectorAll('.view-liked-btn').forEach(btn => {
+        btn.onclick = async () => {
+            const post = await api.get(`/posts/${btn.dataset.id}`);
+            const likedList = post.likes && post.likes.length > 0
+                ? post.likes.join('\n')
+                : 'There are no users who liked this post.';
+            alert(`Liked by:\n\n${likedList}`);
+        };
+    });
+
+    if (user.role === 'user') {
+        postsListEl.querySelectorAll('.like-btn').forEach((icon) => {
+            icon.onclick = () => {
+                toggleLike(icon.dataset.id, user.email, showMyPosts);
+            };
+        });
+    }
 }
+
+
+
+

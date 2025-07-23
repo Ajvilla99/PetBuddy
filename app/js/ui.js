@@ -1,68 +1,71 @@
 import { auth } from './auth.js';
 
-let isAppLayoutRendered = false;
+let isAppShellRendered = false;
 
 export const ui = {
     /**
-     * Renders the main application layout if it hasn't been rendered yet.
+     * Renderiza el "cascarón" principal de la aplicación (sidebars, contenedores).
+     * Está diseñado para ejecutarse solo una vez por sesión de login.
      */
-    renderAppLayout() {
-        if (isAppLayoutRendered) {
-            return; // Do nothing if already rendered
-        }
+    async renderAppShell() {
+        if (isAppShellRendered) return;
 
-        const user = auth.getUser();
-        if (!user) {
-            console.error("Attempted to render layout without a user.");
-            return;
-        }
+        const user = await auth.getUser();
+        if (!user) return;
 
-        // Define navigation links based on user role
+        const adminHeader = user.role === 'admin'
+            ? `<header class="main-header"><h1 id="view-title">Admin Dashboard</h1></header>`
+            : '';
+
         let navLinks = `
-            <a href="#/dashboard" class="nav-btn" data-link><i class="fa-solid fa-house"></i> Dashboard</a>
-            <a href="#/dashboard/posts" class="nav-btn" data-link><i class="fa-solid fa-book"></i> View posts</a>
+            <a href="#/dashboard" class="nav-btn" data-link><i class="fa-solid fa-house"></i> <span>Dashboard</span></a>
+            <a href="#/dashboard/interested-posts" class="nav-btn" data-link><i class="fa-solid fa-heart"></i> <span>Interesados</span></a>
+            <a href="#/dashboard/my-posts" class="nav-btn" data-link><i class="fa-solid fa-user"></i> <span>Mis Posts</span></a>
+            <a href="#/dashboard/create-post" class="nav-btn create-post-main-btn" data-link><i class="fa-solid fa-plus-circle"></i> <span>Crear Post</span></a>
         `;
-        if (user.role === 'admin' || user.role === 'organizer') {
-            navLinks += `
-                <a href="#/dashboard/posts/create" class="nav-btn" data-link><i class="fa-solid fa-plus-circle"></i> Create post</a>            `;
-        }
-                if (user.role === 'admin') {
-            navLinks += `
-                <a href="#/dashboard/users" class="nav-btn" data-link><i class="fa-solid fa-users-cog"></i> Manage Users</a>
-            `;
-        }
-        if (user.role === 'user') {
-            navLinks += `
-                <a href="#/dashboard/my-posts" class="nav-btn" data-link><i class="fa-solid fa-user"></i> My posts</a>
-            `;
+
+        if (user.role === 'admin') {
+            navLinks += `<a href="#/dashboard/users" class="nav-btn" data-link><i class="fa-solid fa-users-cog"></i> <span>Gestionar Usuarios</span></a>`;
         }
 
         document.getElementById('app').innerHTML = `
-            <aside class="sidebar">
-                <div class="user-profile">
-                    <img src="https://i.pravatar.cc/150?u=${user.email}" alt="User" class="profile-img">
-                    <div class="user-info">
-                        <h3>${user.name}</h3>
-                        <p>${user.role}</p>
+            <div class="app-container">
+                <!-- Columna Izquierda: Navegación (Estática) -->
+                <aside class="left-column">
+                    <div class="sidebar-sticky-content">
+                        <div class="user-profile">
+                            <img src="https://i.pravatar.cc/150?u=${user.email}" alt="User" class="profile-img">
+                            <div class="user-info">
+                                <h3>${user.name}</h3>
+                                <p>${user.email}</p>
+                            </div>
+                        </div>
+                        <nav class="sidebar-nav">${navLinks}</nav>
+                        <div class="sidebar-footer">
+                            <button id="logout-btn" class="nav-btn logout-btn">
+                                <i class="fa-solid fa-sign-out-alt"></i> <span>Logout</span>
+                            </button>
+                        </div>
                     </div>
-                </div>
-                <nav class="sidebar-nav">${navLinks}</nav>
-                <div class="sidebar-footer">
-                    <button id="logout-btn" class="nav-btn">
-                        <i class="fa-solid fa-sign-out-alt"></i> Logout
-                    </button>
-                </div>
-            </aside>
-            <main class="main-content">
-                <header class="main-header">
-                    <h1 id="view-title"></h1>
-                </header>
-                <div id="app-content" class="dashboard-content"></div>
-            </main>
+                </aside>
+
+                <!-- Columna Central: Contenido Principal (Dinámico) -->
+                <main class="main-column">
+                    ${adminHeader}
+                    <div id="app-content"></div>
+                </main>
+
+                <!-- Columna Derecha: Contenido Adicional (Estática) -->
+                <aside class="right-column">
+                    <div class="sidebar-sticky-content">
+                        <h3>Tendencias</h3>
+                        <p>Contenido a pensar...</p>
+                    </div>
+                </aside>
+            </div>
         `;
 
         document.getElementById('logout-btn').onclick = auth.logout;
-        // Post listeners to handle navigation links
         document.querySelectorAll('[data-link]').forEach(link => {
             link.onclick = (e) => {
                 e.preventDefault();
@@ -70,23 +73,22 @@ export const ui = {
             };
         });
 
-        isAppLayoutRendered = true;
+        isAppShellRendered = true;
     },
 
     /**
-     * Resets the entire application UI, typically on logout.
+     * Resetea completamente el layout, usualmente al hacer logout.
      */
     resetLayout() {
-        isAppLayoutRendered = false;
+        isAppShellRendered = false;
         document.getElementById('app').innerHTML = '';
     },
     
     /**
-     * Updates the active state of the sidebar navigation.
-     * @param {string} path - The current URL hash path.
+     * Actualiza el estado activo del botón de navegación actual.
      */
-    updateNavActiveState(path) {
-        if (!isAppLayoutRendered) return;
+    async updateNavActiveState(path) {
+        if (!isAppShellRendered) return;
         
         document.querySelectorAll('.sidebar-nav .nav-btn').forEach(btn => {
             btn.classList.remove('active');
@@ -95,8 +97,12 @@ export const ui = {
                 btn.classList.add('active');
             }
         });
+
         if (path === '#/dashboard') {
-            document.querySelector('.nav-btn[href="#/dashboard"]').classList.add('active');
+            const user = await auth.getUser();
+            if (user && user.role === 'admin') {
+                document.querySelector('.nav-btn[href="#/dashboard"]').classList.add('active');
+            }
         }
     }
 };

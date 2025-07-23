@@ -5,23 +5,48 @@
     min-height: 100vh;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: right;
     background-color: var(--background-secondary);
     padding: 20px;
     box-sizing: border-box;
     overflow-y: auto;
 }
 
+.login-page-container::before {
+  content: "";
+  background-image: url("/img/bg-login.png");
+  position: absolute;
+  z-index: 10;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
 .login-form-container {
-    background: var(--background-primary);
-    padding: 2.5rem 3rem;
-    border-radius: var(--radius-xl);
-    box-shadow: var(--special-shadow);
-    width: 100%;
-    max-width: 420px;
-    text-align: center;
-    margin: auto;
-    min-height: fit-content;
+  /* background: var(--background-primary); */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2.5rem 3rem;
+  border-radius: var(--radius-xl);
+  box-shadow: var(--special-shadow);
+  width: 33%;
+  max-width: 440px;
+  text-align: center;
+  height: 90%;
+  min-height: fit-content;
+  z-index: 20;
+  backdrop-filter: blur(10px) saturate(100%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  background-color: rgba(62, 40, 19, 0.75);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.125);
 }
 
 .login-form-container h2 {
@@ -92,4 +117,40 @@
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
+}
+
+
+
+/* styles.css | http://localhost:5173/app/styles/styles.css */
+
+.login-form-container h2 {
+  /* color: var(--text-primary); */
+  /* color: var(--text-); */
+  color: var(--warning-color);
+}
+
+.login-form-container label {
+  /* color: var(--text-secondary); */
+  color: var(--background-primary);
+}
+
+.login-form-container {
+  /* gap: 20px; */
+  flex-shrink: 0;
+  flex-basis: 500px;
+}
+
+.login-page-container {
+  /* padding: 20px; */
+  padding: 20px 6vw;
+}
+
+.btn-primary:hover {
+  /* background: var(--primary-hover); */
+  background-color: var(--accent-color);
+}
+
+.btn-primary {
+  /* background: var(--primary-color); */
+  background: var(--warning-color);
 }

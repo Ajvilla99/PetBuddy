@@ -7,14 +7,15 @@ import { renderNotFound } from './notFound.js';
  * Displays the form to edit an existing user, fitting the new UI design.
  */
 export async function showEditUser(userId) {
-    const currentUser = auth.getUser();
+    const currentUser = await auth.getUser();
     if (currentUser.role !== 'admin') {
         renderForbidden();
         return;
     }
 
     // Set the title in the main header
-    document.getElementById('view-title').textContent = 'Edit User';
+    user.role === 'admin' ? document.getElementById('view-title').textContent = 'Edit User' : '';
+
     const contentEl = document.getElementById('app-content');
     
     // Fetch user to edit and all users to get the available roles

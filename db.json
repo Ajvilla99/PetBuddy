@@ -16,25 +16,257 @@
     },
     {
       "id": "3",
-      "name": "Carlos Andres",
-      "email": "carlos.andres@user.com",
+      "name": "Walter Alex",
+      "email": "walter.alex@user.com",
       "password": "ac9c2c34c9f7ad52528c3422af40a66e2e24aaf2a727831255413c9470158984",
+      "role": "user"
+    },
+    {
+      "id": "dcdf",
+      "name": "Walter Alex",
+      "email": "antonio.santiago@gmail.com",
+      "password": "a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3",
+      "role": "user"
+    },
+    {
+      "id": "1a74",
+      "name": "asdas",
+      "email": "sdas@mail.com",
+      "password": "a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3",
+      "role": "user"
+    },
+    {
+      "id": "dd9f",
+      "name": "Andrés Fontalvo",
+      "email": "andres@mail.com",
+      "password": "f6af6e4d6c9315f6a693f27a4868f405edf15d97cbf661d8ac29071b2b6b5961",
       "role": "user"
     }
   ],
   "posts": [
     {
-      "title": "Post at the Park",
-      "description": "A fun day at the park with games and activities.",
-      "category": "Outdoor",
-      "organizer": "Juan Perez",
-      "capacity": 18,
-      "id": "1",
-      "date": "2025-07-20",
-      "time": "10:00",
+      "id": "5bfc",
+      "title": "¡Encontré este perrito perdido!",
+      "description": "Estaba deambulando cerca del parque central. Es muy amigable y parece bien cuidado. ¿Alguien lo reconoce?",
+      "category": "Mascota Encontrada",
+      "user": "Juan Perez",
+      "createdAt": "2024-05-20T14:30:00.000Z",
+      "imageUrl": "https://images.pexels.com/photos/1108099/pexels-photo-1108099.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+      "likes": [
+        "adsa@gmail.com",
+        "juan.perez@user.com",
+        "andres@mail.com"
+      ],
+      "interested": [
+        "adsa@gmail.com",
+        "andres@mail.com"
+      ]
+    },
+    {
+      "id": "6a6b",
+      "title": "Gatita en adopción responsable",
+      "description": "Esta pequeña necesita un hogar. Tiene unos 3 meses, está desparasitada. Muy juguetona.",
+      "category": "Adopción",
+      "user": "Walter Alex",
+      "createdAt": "2024-05-21T09:15:10.000Z",
+      "imageUrl": "https://images.pexels.com/photos/45201/kitty-cat-kitten-pet-45201.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+      "likes": [
+        "adsa@gmail.com",
+        "juan.perez@user.com"
+      ],
+      "interested": [
+        "juan.perez@user.com"
+      ]
+    },
+    {
+      "id": "0124",
+      "title": "Consejos para el primer viaje en coche",
+      "description": "Voy a viajar con mi perro por primera vez, ¿algún consejo para que no se maree?",
+      "category": "Consejos",
+      "user": "Walter Alex",
+      "createdAt": "2024-05-21T11:05:00.000Z",
+      "imageUrl": "",
+      "likes": [],
+      "interested": [
+        "juan.perez@user.com"
+      ]
+    },
+    {
+      "id": "7c8d",
+      "title": "Se perdió mi gato Max en el barrio El Prado",
+      "description": "Es un gato naranja con collar azul. Salió ayer por la noche y no ha regresado. Muy sociable y responde a su nombre. Por favor si lo ven contactarme.",
+      "category": "Mascota Perdida",
+      "user": "Carlos Andres",
+      "createdAt": "2024-05-22T08:45:30.000Z",
+      "imageUrl": "https://images.pexels.com/photos/1170986/pexels-photo-1170986.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+      "likes": [
+        "juan.perez@user.com"
+      ],
+      "interested": [
+        "juan.perez@user.com",
+        "adsa@gmail.com"
+      ]
+    },
+    {
+      "id": "9e2f",
+      "title": "Hermosos cachorros en busca de hogar",
+      "description": "Tengo 4 cachorros mestizos de labrador que necesitan familia. Tienen 2 meses, están vacunados y desparasitados. Son muy cariñosos y juguetones.",
+      "category": "Adopción",
+      "user": "asdas",
+      "createdAt": "2024-05-22T16:20:45.000Z",
+      "imageUrl": "https://images.pexels.com/photos/1805164/pexels-photo-1805164.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+      "likes": [
+        "adsa@gmail.com",
+        "juan.perez@user.com",
+        "carlos.andres@user.com"
+      ],
+      "interested": [
+        "carlos.andres@user.com",
+        "adsa@gmail.com"
+      ]
+    },
+    {
+      "id": "3a4b",
+      "title": "¿Cómo entrenar a un cachorro para hacer sus necesidades?",
+      "description": "Mi cachorro de 3 meses no logra aprender dónde hacer sus necesidades. ¿Algún consejo efectivo? Ya probé con periódicos pero no funciona.",
+      "category": "Consejos",
+      "user": "Juan Perez",
+      "createdAt": "2024-05-23T10:30:00.000Z",
+      "imageUrl": "https://images.pexels.com/photos/1851164/pexels-photo-1851164.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+      "likes": [
+        "carlos.andres@user.com",
+        "adsa@gmail.com"
+      ],
       "interested": [
         "carlos.andres@user.com"
       ]
+    },
+    {
+      "id": "4b5c",
+      "title": "Hermosa coneja encontrada en la Universidad",
+      "description": "Encontré esta coneja cerca de la cafetería de la universidad. Parece doméstica y está muy asustada. ¿Alguien la reconoce?",
+      "category": "Mascota Encontrada",
+      "user": "Carlos Andres",
+      "createdAt": "2024-05-23T13:45:20.000Z",
+      "imageUrl": "https://images.pexels.com/photos/326012/pexels-photo-326012.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+      "likes": [
+        "juan.perez@user.com",
+        "adsa@gmail.com"
+      ],
+      "interested": [
+        "juan.perez@user.com"
+      ]
+    },
+    {
+      "id": "5c6d",
+      "title": "Busco pareja para mi gata persa",
+      "description": "Tengo una gata persa de 2 años, muy saludable y cariñosa. Busco un macho persa para apareamiento responsable. Tengo todos los papeles veterinarios.",
+      "category": "Apareamiento",
+      "user": "Walter Alex",
+      "createdAt": "2024-05-23T17:10:30.000Z",
+      "imageUrl": "https://images.pexels.com/photos/416160/pexels-photo-416160.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+      "likes": [
+        "juan.perez@user.com"
+      ],
+      "interested": [
+        "carlos.andres@user.com"
+      ]
+    },
+    {
+      "id": "6d7e",
+      "title": "Se perdió mi perrita Lola ayer en el centro",
+      "description": "Es una Golden Retriever de 4 años, muy dócil. Llevaba collar rosa con mi número. Se asustó con los fuegos artificiales y salió corriendo. Recompensa por encontrarla.",
+      "category": "Mascota Perdida",
+      "user": "asdas",
+      "createdAt": "2024-05-24T07:20:15.000Z",
+      "imageUrl": "https://images.pexels.com/photos/552598/pexels-photo-552598.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+      "likes": [
+        "juan.perez@user.com",
+        "carlos.andres@user.com",
+        "adsa@gmail.com"
+      ],
+      "interested": [
+        "juan.perez@user.com",
+        "carlos.andres@user.com",
+        "adsa@gmail.com"
+      ]
+    },
+    {
+      "id": "7e8f",
+      "title": "Gatitos recién nacidos necesitan hogar urgente",
+      "description": "Una gata callejera tuvo bebés en mi patio. Son 5 gatitos de diferentes colores, muy pequeños pero ya comen solos. Necesitan familias amorosas urgentemente.",
+      "category": "Adopción",
+      "user": "Juan Perez",
+      "createdAt": "2024-05-24T11:55:40.000Z",
+      "imageUrl": "https://images.pexels.com/photos/1741205/pexels-photo-1741205.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+      "likes": [
+        "adsa@gmail.com",
+        "carlos.andres@user.com"
+      ],
+      "interested": [
+        "adsa@gmail.com",
+        "carlos.andres@user.com"
+      ]
+    },
+    {
+      "id": "8f9g",
+      "title": "¿Mejor comida para perros senior?",
+      "description": "Mi perro tiene 12 años y el veterinario dice que necesita cambiar la dieta. ¿Qué marcas recomiendan para perros mayores? Que sea nutritiva pero no muy cara.",
+      "category": "Consejos",
+      "user": "Carlos Andres",
+      "createdAt": "2024-05-24T14:30:25.000Z",
+      "imageUrl": "https://images.pexels.com/photos/1390361/pexels-photo-1390361.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+      "likes": [
+        "juan.perez@user.com",
+        "adsa@gmail.com"
+      ],
+      "interested": [
+        "juan.perez@user.com"
+      ]
+    },
+    {
+      "id": "9g0h",
+      "title": "Loro encontrado en el barrio Riomar",
+      "description": "Este loro apareció en mi ventana esta mañana. Habla algunas palabras y parece muy domesticado. Debe tener dueño preocupado. ¿Alguien lo reconoce?",
+      "category": "Mascota Encontrada",
+      "user": "Walter Alex",
+      "createdAt": "2024-05-25T09:15:50.000Z",
+      "imageUrl": "https://images.pexels.com/photos/56733/pexels-photo-56733.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+      "likes": [
+        "juan.perez@user.com",
+        "carlos.andres@user.com"
+      ],
+      "interested": [
+        "carlos.andres@user.com"
+      ]
+    },
+    {
+      "id": "0h1i",
+      "title": "Busco hogar para tortuga de agua",
+      "description": "Por mudanza no puedo llevar a mi tortuga. Tiene 3 años, muy tranquila. Incluyo el acuario completo con filtro y accesorios. Solo a persona responsable.",
+      "category": "Adopción",
+      "user": "asdas",
+      "createdAt": "2024-05-25T15:40:10.000Z",
+      "imageUrl": "https://images.pexels.com/photos/1618606/pexels-photo-1618606.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+      "likes": [
+        "adsa@gmail.com",
+        "juan.perez@user.com"
+      ],
+      "interested": [
+        "adsa@gmail.com",
+        "juan.perez@user.com"
+      ]
+    },
+    {
+      "id": "3bec",
+      "title": "Cachorro en adopción",
+      "description": "Hola, tengo este perrito para adoptar",
+      "category": "Adopción",
+      "imageUrl": "",
+      "user": "Andrés Fontalvo",
+      "createdAt": "2025-07-17T11:39:41.791Z",
+      "likes": [],
+      "interested": []
     }
   ]
 }

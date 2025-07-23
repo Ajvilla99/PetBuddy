@@ -111,6 +111,7 @@
     align-items: center;
     font-size: 14px;
     color: var(--text-secondary);
+    gap: 10px;
 }
 
 .post-meta span {
@@ -172,7 +173,6 @@
 }
 
 .post-footer {
-    padding: 16px 20px;
     border-top: 1px solid var(--border-color);
     background-color: var(--background-secondary);
     border-radius: var(--radius-lg);
@@ -241,4 +241,9 @@
 
 .post-item.past-post .post-date i {
     color: var(--text-muted);
+}
+
+.fa-heart:hover, .liked {
+    color: var(--danger-color);
+    font-size: 1.2rem;
 }

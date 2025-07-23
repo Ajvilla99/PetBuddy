@@ -8,19 +8,20 @@ import { renderForbidden } from './forbidden.js';
  * If the user is not authorized, it renders a forbidden view.
  */
 export async function showCreateUser() {
-    const user = auth.getUser();
+    const user = await auth.getUser();
     if (user.role !== 'admin') {
         renderForbidden();
         return;
     }
 
-    document.getElementById('view-title').textContent = 'Create a New User';
+    user.role === 'admin' ? document.getElementById('view-title').textContent = 'Create a New User' : '';
+
     const contentEl = document.getElementById('app-content');
     
     const users = await api.get('/users');
     const roles = [...new Set(users.map(u => u.role))];
     if (!roles.includes('user')) roles.push('user');
-    if (!roles.includes('organizer')) roles.push('organizer');
+    if (!roles.includes('user')) roles.push('user');
 
 
     contentEl.innerHTML = `

@@ -8,13 +8,14 @@ import { renderForbidden } from './forbidden.js';
  * If the user is not an admin, it renders a forbidden view.
  */
 export async function showManageUsers() {
-    const user = auth.getUser();
+    const user = await auth.getUser();
     if (user.role !== 'admin') {
         renderForbidden();
         return;
     }
 
-    document.getElementById('view-title').textContent = 'Manage Users';
+    user.role === 'admin' ? document.getElementById('view-title').textContent = 'Manage Users' : '';
+
     const contentEl = document.getElementById('app-content');
 
     contentEl.innerHTML = `
@@ -81,11 +82,10 @@ export async function showManageUsers() {
             if (userToDelete?.email) {
                 const posts = await api.get('/posts');
                 for (const post of posts) {
-                    // Verify if the user is interested in this post
-                    if (Array.isArray(post.interested) && post.interested.includes(userToDelete.email)) {
-                        const newEnrolled = post.interested.filter(email => email !== userToDelete.email);
-                        const newCapacity = post.capacity + 1;
-                        await api.patch(`/posts/${post.id}`, { interested: newEnrolled, capacity: newCapacity });
+                    // Verify if the user liked this post
+                    if (Array.isArray(post.likes) && post.likes.includes(userToDelete.email)) {
+                        const newLikes = post.likes.filter(email => email !== userToDelete.email);
+                        await api.patch(`/posts/${post.id}`, { likes: newLikes });
                     }
                 }
             }
