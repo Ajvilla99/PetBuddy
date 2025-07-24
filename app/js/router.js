@@ -12,6 +12,7 @@ import { showEditUser } from './views/editUser.js';
 import { showCreateUser } from './views/createUser.js';
 import { showMyPosts } from './views/myPosts.js';
 import { showInterestedPosts } from './views/interestedPosts.js';
+import { showProfile } from './views/profile.js';
 
 const routes = {
     '#/login': showLogin,
@@ -23,6 +24,7 @@ const routes = {
     '#/dashboard/users/edit/': showEditUser,
     '#/dashboard/users/create': showCreateUser,
     '#/dashboard/my-posts': showMyPosts,
+    '#/dashboard/my-profile': showProfile,
     '#/not-found': renderNotFound,
 };
 

@@ -20,7 +20,7 @@ export const ui = {
         let navLinks = `
             <a href="#/dashboard" class="nav-btn" data-link><i class="fa-solid fa-house"></i> <span>Dashboard</span></a>
             <a href="#/dashboard/interested-posts" class="nav-btn" data-link><i class="fa-solid fa-heart"></i> <span>Interesados</span></a>
-            <a href="#/dashboard/my-posts" class="nav-btn" data-link><i class="fa-solid fa-user"></i> <span>Mis Posts</span></a>
+            <a href="#/dashboard/my-profile" class="nav-btn" data-link><i class="fa-solid fa-user"></i> <span>Mi perfil</span></a>
             <a href="#/dashboard/create-post" class="nav-btn create-post-main-btn" data-link><i class="fa-solid fa-plus-circle"></i> <span>Crear Post</span></a>
         `;
 
